@@ -11,6 +11,12 @@
 # production
 /build
 
+#images
+/src/client/i/*.png
+/src/client/i/*.jpg
+/src/admin/i/*.jpg
+/src/admin/i/*.png
+
 # misc
 .DS_Store
 .env.local
