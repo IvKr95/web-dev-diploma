@@ -1,17 +1,9 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-use-before-define */
-
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const SEAT_TYPES = ['standard', 'vip', 'disabled'];
-
-function ActiveHallMap(props) {
-  const {
-    activeHallMap,
-    setActiveHallMap,
-    hallMapParams,
-  } = props;
+const ActiveHallMap = (props) => {
+  const { activeHallMap, setActiveHallMap, hallMapParams } = props;
+  const [seatTypes, setSeatTypes] = useState(['standard', 'vip', 'disabled']);
 
   useEffect(() => {
     updateHallMap();
@@ -20,12 +12,12 @@ function ActiveHallMap(props) {
   const handleChangeSeatType = (prevSeat, row, seat) => {
     let newSeatType;
 
-    if (prevSeat === SEAT_TYPES[0]) {
-      newSeatType = SEAT_TYPES[1];
-    } else if (prevSeat === SEAT_TYPES[1]) {
-      newSeatType = SEAT_TYPES[2];
+    if (prevSeat === seatTypes[0]) {
+      newSeatType = seatTypes[1];
+    } else if (prevSeat === seatTypes[1]) {
+      newSeatType = seatTypes[2];
     } else {
-      newSeatType = SEAT_TYPES[0];
+      newSeatType = seatTypes[0];
     }
 
     setActiveHallMap((prev) => {
@@ -42,7 +34,7 @@ function ActiveHallMap(props) {
     for (let r = 0; r < nRows; r++) {
       updHallMap[r] = [];
       for (let s = 0; s < nSeats; s++) {
-        updHallMap[r].push(SEAT_TYPES[0]);
+        updHallMap[r].push(seatTypes[0]);
       }
     }
 
@@ -76,7 +68,7 @@ function ActiveHallMap(props) {
       </div>
     </div>
   );
-}
+};
 
 ActiveHallMap.propTypes = {
   activeHallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,

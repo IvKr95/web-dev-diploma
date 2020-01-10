@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-use-before-define */
-
 import React from 'react';
 import axios from 'axios';
 
@@ -18,55 +15,45 @@ const withCrud = (Component) => {
             } else {
               setter(response.data);
             }
-            if (data.callback) {
-              data.callback();
-            }
           }
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log('Error', error.message);
           }
         });
     };
 
-    const list = ({ url, params, callback }) => {
-      axios.get(
-        url,
-        {
-          params,
-        },
-      )
+    const list = (data) => {
+      axios.get(data.url, {
+        params: data.body,
+      })
         .then((response) => {
           if (response.status === 200) {
-            if (callback) {
-              callback(response.data);
-            }
+            data.callback(response.data);
           }
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log('Error', error.message);
           }
         });
     };
 
-    const add = ({
-      url, body, responseType, callback,
-    }) => {
+    const add = (data) => {
       axios.post(
-        url,
-        body,
+        data.url,
+        data.body,
         {
-          responseType,
+          responseType: data.responseType,
         },
       )
         .then((response) => {
@@ -76,68 +63,64 @@ const withCrud = (Component) => {
             if (resType === 'image/png') {
               const res = response.data;
               const blob = new Blob([res], { type: 'image/png' });
-              const src = URL.createObjectURL(blob);
-              callback(src);
+              const url = URL.createObjectURL(blob);
+              data.callback(url);
             } else {
-              callback();
+              data.callback();
             }
           }
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log('Error', error.message);
           }
         });
     };
 
-    const update = ({ url, body, callback }) => {
+    const update = (data) => {
       axios.put(
-        url,
-        body,
+        data.url,
+        data.body,
       )
         .then((response) => {
           if (response.status === 200) {
-            if (callback) {
-              callback();
-            }
+            data.callback();
           }
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log('Error', error.message);
           }
         });
     };
 
-    const remove = ({ url, params, callback }) => {
+    const remove = (data) => {
       axios.delete(
-        url,
+        data.url,
         {
-          params,
+          data: data.body,
         },
       )
         .then((response) => {
           if (response.status === 200) {
-            if (callback) {
-              callback();
-            }
+            data.callback();
           }
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log('Error', error.message);
           }
         });
     };

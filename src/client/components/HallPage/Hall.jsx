@@ -1,6 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-use-before-define */
-
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -21,10 +18,7 @@ const INACTIVE_LINK_CSS = {
 
 const Hall = (props) => {
   const {
-    data,
-    hall,
-    hallMap,
-    setHallMap,
+    data, hall, hallMap, setHallMap,
   } = props;
 
   const [tickets, setTickets] = useState([]);

@@ -1,11 +1,7 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable react/jsx-filename-extension */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  BrowserRouter as Router, Switch, Route, Redirect,
+  BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import ErrorPage from './client/components/ErrorPage/ErrorPage';
@@ -13,28 +9,25 @@ import HallPage from './client/components/HallPage/HallPage';
 import HomePage from './client/components/HomePage/HomePage';
 import PaymentPage from './client/components/PaymentPage/PaymentPage';
 import TicketPage from './client/components/TicketPage/TicketPage';
-import LoginPage from './login/LoginPage';
+import LoginPage from './login/LoginPage/LoginPage';
 import AdminPage from './admin/components/AdminPage';
 
 import DateContext from './contexts/DateContext';
 import LoginContext from './contexts/LoginContext';
-import withAuthorization from './hoc/WithAuthorization';
 
-const App = ({ fetch }) => {
+import './App.css';
+
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [chosen, setChosen] = useState(moment().format('L'));
 
-  useEffect(() => {
-    fetch(setIsLoggedIn);
-  }, []);
-
   return (
-    <LoginContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
-      <DateContext.Provider value={{ chosen, setChosen }}>
+    <LoginContext.Provider value={isLoggedIn}>
+      <DateContext.Provider value={chosen}>
         <Router>
           <Switch>
             <Route path="/admin" exact strict>
-              {isLoggedIn ? <AdminPage /> : <Redirect to="/" />}
+              <AdminPage setChosen={setChosen} />
             </Route>
 
             <Route path="/hall" component={HallPage} />
@@ -44,11 +37,11 @@ const App = ({ fetch }) => {
             <Route path="/ticket" component={TicketPage} />
 
             <Route path="/login">
-              {isLoggedIn ? <Redirect to="admin" /> : <LoginPage />}
+              <LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
             </Route>
 
             <Route path="/" exact>
-              <HomePage />
+              <HomePage setChosen={setChosen} />
             </Route>
 
             <Route component={ErrorPage} />
@@ -59,8 +52,4 @@ const App = ({ fetch }) => {
   );
 };
 
-App.propTypes = {
-  fetch: PropTypes.func.isRequired,
-};
-
-export default withAuthorization(App, process.env.REACT_APP_AUTH_URL);
+export default App;

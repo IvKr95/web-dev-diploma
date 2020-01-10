@@ -1,9 +1,6 @@
 import React from 'react';
 
-const LoginContext = React.createContext({
-  isLoggedIn: false,
-  setIsLoggedIn: () => {},
-});
+const LoginContext = React.createContext(false);
 LoginContext.displayName = 'LoginContext';
 
 export default LoginContext;

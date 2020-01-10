@@ -1,9 +1,10 @@
-/* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../css/client.css';
 
-function ClientUI({ children }) {
+function ClientUI(props) {
+  const { children } = props;
+
   return (
     <div className="client-ui">
       {children}

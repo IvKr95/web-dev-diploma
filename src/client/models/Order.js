@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 class Order {
   constructor({ id, tickets }) {
     this.id = id;

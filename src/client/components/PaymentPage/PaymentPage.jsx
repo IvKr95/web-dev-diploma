@@ -1,69 +1,43 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-use-before-define */
-
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import ClientHeader from '../../../shared-components/Header';
-import ClientMain from '../../../shared-components/Main';
-import Payment from './Payment';
+import ClientHeader from '../ClientHeader';
+import ClientMain from '../ClientMain';
+import DisplayPayment from './DisplayPayment';
 import Order from '../../models/Order';
 import '../../css/client.css';
 
-const PaymentPage = ({ location }) => {
-  const { params, state } = location;
-  const { tickets, data, hallMap } = params;
+const PaymentPage = (props) => {
+  const { params, state } = props.location;
 
   const [order, setOrder] = useState({});
-  const [totalPrice, setTotalPrice] = useState(null);
-  const [seats, setSeats] = useState([]);
 
   useEffect(() => {
     if (state && state.fromHallPage) {
-      if (tickets.length !== 0) {
-        createNewOrder();
-        calcTotalPrice();
-        incrementSeatNumber();
+      if (params.tickets.length !== 0) {
+        const newOrder = new Order({
+          id: nanoid(),
+          tickets: params.tickets,
+        });
+        setOrder(newOrder);
       }
     }
   }, []);
 
-  const createNewOrder = () => {
-    const newOrder = new Order({
-      id: nanoid(),
-      tickets,
-    });
-    setOrder(newOrder);
-  };
-
-  const calcTotalPrice = () => {
-    const newTotalPrice = tickets.reduce((acc, cur) => acc + cur.price, 0);
-    setTotalPrice(newTotalPrice);
-  };
-
-  const incrementSeatNumber = () => {
-    const newSeats = tickets.map((ticket) => (
-      { row: ticket.row + 1, seat: ticket.seat + 1 }
-    ));
-    setSeats(newSeats);
-  };
-
   return (
     <>
       {
-        state && state.fromHallPage && tickets.length > 0 ? (
+        state && state.fromHallPage ? (
           <ClientUI>
             <ClientHeader />
 
             <ClientMain>
-              <Payment
-                data={data}
-                hallMap={hallMap}
+              <DisplayPayment
+                data={params.data}
+                hallMap={params.hallMap}
                 newOrder={order}
-                totalPrice={totalPrice}
-                seats={seats}
               />
             </ClientMain>
           </ClientUI>

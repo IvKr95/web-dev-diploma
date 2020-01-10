@@ -1,11 +1,9 @@
-/* eslint-disable linebreak-style */
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import SetHallMapForm from '../Forms/SetHallMap';
-import ConfStepLegend from '../Module/ModuleLegend';
+import SetHallMapForm from '../Forms/SetHallMapForm';
+import ConfStepLegend from '../ConfSteps/ConfStepLegend';
 import ActiveHallMap from './ActiveHallMap';
-import ModuleBtns from '../Module/ModuleBtns';
+import ConfStepBtns from '../ConfSteps/ConfStepBtns';
 
 const DEFAULT_HALL_MAP_PARAMS = {
   rows: '',
@@ -47,7 +45,7 @@ const SetHallMap = (props) => {
         setActiveHallMap={setActiveHallMap}
         hallMapParams={hallMapParams}
       />
-      <ModuleBtns form="set_hall-map" onReset={handleReset} />
+      <ConfStepBtns form="set_hall-map" onReset={handleReset} />
     </>
   );
 };

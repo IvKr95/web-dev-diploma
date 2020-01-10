@@ -1,21 +1,23 @@
-/* eslint-disable linebreak-style */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import Hall from './Hall';
 
 function HallList(props) {
-  const {
-    halls,
-    handleModal,
-  } = props;
+  const { halls, handleModal } = props;
 
   return (
     <>
       <p className="conf-step__paragraph">Доступные залы:</p>
       <ul className="conf-step__list">
         {halls.map((hall) => (
-          <Hall key={hall.hallName} hallName={hall.hallName} onDelete={handleModal} />
+          <li key={hall.hallName}>
+            {hall.hallName}
+            <button
+              type="button"
+              className="conf-step__button conf-step__button-trash"
+              data-action="deleteHall"
+              onClick={(e) => handleModal(e, hall.hallName)}
+            />
+          </li>
         ))}
       </ul>
       <button
