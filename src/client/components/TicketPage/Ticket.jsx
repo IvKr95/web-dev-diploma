@@ -1,8 +1,11 @@
+/* eslint-disable linebreak-style */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function Ticket(props) {
-  const { data, qr } = props;
+  const { data, seats, qr } = props;
+  const { movieName, hall, time } = data;
 
   return (
     <section className="ticket">
@@ -15,22 +18,31 @@ function Ticket(props) {
         <p className="ticket__info">
 На фильм:
           {' '}
-          <span className="ticket__details ticket__title">{data.movieName}</span>
+          <span className="ticket__details ticket__title">{movieName}</span>
         </p>
         <p className="ticket__info">
 Места:
           {' '}
-          <span className="ticket__details ticket__chairs">6, 7</span>
+          {seats.map((s) => (
+            <>
+Ряд:
+              {' '}
+              <span className="ticket__details ticket__chairs">{s.row}</span>
+Место:
+              {' '}
+              <span className="ticket__details ticket__chairs">{s.seat}</span>
+            </>
+          ))}
         </p>
         <p className="ticket__info">
 В зале:
           {' '}
-          <span className="ticket__details ticket__hall">{data.hall}</span>
+          <span className="ticket__details ticket__hall">{hall}</span>
         </p>
         <p className="ticket__info">
 Начало сеанса:
           {' '}
-          <span className="ticket__details ticket__start">{data.time.time}</span>
+          <span className="ticket__details ticket__start">{time.time}</span>
         </p>
 
         <img className="ticket__info-qr" src={qr} alt="qr-code" />
@@ -47,6 +59,7 @@ Ticket.propTypes = {
     hall: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,
   }).isRequired,
+  qr: PropTypes.string.isRequired,
 };
 
 export default Ticket;

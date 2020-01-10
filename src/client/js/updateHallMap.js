@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const updateHallMap = (map) => {
   for (const row of map) {
     for (const seat of row) {

@@ -1,21 +1,28 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import AddHallForm from '../Forms/AddHallForm';
-import AddMovieForm from '../Forms/AddMovieForm';
-import DeleteHallForm from '../Forms/DeleteHallForm';
-import AddShowForm from '../Forms/AddShowForm';
-import DeleteShowForm from '../Forms/DeleteShowForm';
+import AddHall from '../Forms/AddHall';
+import AddMovie from '../Forms/AddMovie';
+import DeleteHall from '../Forms/DeleteHall';
+import AddShow from '../Forms/AddShow';
+import DeleteShow from '../Forms/DeleteShow';
 
 const ModalBody = (props) => {
   const {
-    action, onAddShow: addShow,
-    onAddHall: addHall, onAddMovie: addMovie,
-    onClose: handleModal, itemToDelete, onDelete: handleDelete,
+    action,
+    onAddShow: addShow,
+    onAddHall: addHall,
+    onAddMovie: addMovie,
+    onClose: handleModal,
+    itemToDelete,
+    onDelete: handleDelete,
     halls,
   } = props;
 
-  const [modalToShow, setModalToShow] = useState(null);
+  const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     if (action) {
@@ -29,7 +36,7 @@ const ModalBody = (props) => {
     switch (action) {
       case 'addHall':
         newModal = (
-          <AddHallForm
+          <AddHall
             onAddHall={addHall}
             onClose={handleModal}
           />
@@ -37,7 +44,7 @@ const ModalBody = (props) => {
         break;
       case 'deleteHall':
         newModal = (
-          <DeleteHallForm
+          <DeleteHall
             hallName={itemToDelete}
             onDelete={handleDelete}
             onClose={handleModal}
@@ -46,7 +53,7 @@ const ModalBody = (props) => {
         break;
       case 'addMovie':
         newModal = (
-          <AddMovieForm
+          <AddMovie
             onAddMovie={addMovie}
             onClose={handleModal}
           />
@@ -54,7 +61,7 @@ const ModalBody = (props) => {
         break;
       case 'addShowTime':
         newModal = (
-          <AddShowForm
+          <AddShow
             halls={halls}
             onAddShow={addShow}
             onClose={handleModal}
@@ -63,8 +70,8 @@ const ModalBody = (props) => {
         break;
       case 'deleteShowTime':
         newModal = (
-          <DeleteShowForm
-            show={itemToDelete}
+          <DeleteShow
+            movie={itemToDelete.movie}
             onDelete={handleDelete}
             onClose={handleModal}
           />
@@ -76,12 +83,12 @@ const ModalBody = (props) => {
         break;
     }
 
-    setModalToShow(newModal);
+    setActiveModal(newModal);
   };
 
   return (
     <div className="popup__wrapper">
-      {modalToShow}
+      {activeModal}
     </div>
   );
 };

@@ -1,14 +1,17 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AdminHeader from './AdminPageElements/AdminHeader';
-import AdminNav from './AdminPageElements/AdminNav';
-import AdminMain from './AdminPageElements/AdminMain';
-import AdminConfStep from './AdminPageElements/AdminConfStep';
-import ConfStepHeader from './ConfSteps/ConfStepHeader';
-import ConfStepBody from './ConfSteps/ConfStepBody';
-import ConfStepMovies from './ConfSteps/ConfStepMovies';
-import ConfStepSeances from './ConfSteps/ConfStepSeances';
+import AdminHeader from '../../shared-components/Header';
+import AdminNav from '../../shared-components/Nav';
+import AdminMain from '../../shared-components/Main';
+import AdminModule from './Module/AdminModule';
+import ModuleHeader from './Module/ModuleHeader';
+import ModuleBody from './Module/ModuleBody';
+import ModuleMovies from './Module/ModuleMovies';
+import ModuleSeances from './Module/ModuleSeances';
 import SetHallMap from './Halls/SetHallMap';
 
 import Modal from './Modal/Modal';
@@ -16,18 +19,16 @@ import ModalHeader from './Modal/ModalHeader';
 import ModalBody from './Modal/ModalBody';
 
 import HallList from './Halls/HallList';
-import ConfigHalls from './Halls/ConfigHalls';
-import ConfigPrices from './Prices/ConfigPrices';
-import HallsSwitcher from './Halls/HallsSwitcher';
+import HallsSwitcher from './Halls/HallSwitcher';
 
-import ConfigShows from './Shows/ConfigShows';
 import OpenSales from './Sales/OpenSales';
-import UpdatePricesForm from './Forms/UpdatePricesForm';
+import UpdatePricesForm from './Forms/UpdatePrices';
 
-import '../css/admin.css';
 import withCrud from '../../hoc/WithCrud';
-import withAdminLogic from '../../hoc/WithAdminLogic';
-import withAdminState from '../../hoc/WithAdminState';
+import withAdminLogic from '../hoc/WithAdminLogic';
+import withAdminState from '../hoc/WithAdminState';
+import '../css/admin.css';
+import withLoadingScreen from '../../hoc/WithLoadingScreen';
 
 const AdminPage = (props) => {
   const {
@@ -42,7 +43,6 @@ const AdminPage = (props) => {
     openSales,
     handleHeader,
     updatePrices,
-    setChosen,
     halls,
     shows,
     movies,
@@ -52,6 +52,7 @@ const AdminPage = (props) => {
     itemToDelete,
     isModalActive,
     activeHallMap,
+    isLoading,
   } = props;
 
   const ModalSlot = (
@@ -73,136 +74,132 @@ const AdminPage = (props) => {
 
   const HasHallsSlot = (
     <>
-      <AdminConfStep>
-        <ConfStepHeader
+      <AdminModule>
+        <ModuleHeader
           header={headers[0]}
           onClick={handleHeader}
         />
-        <ConfStepBody>
+        <ModuleBody>
           <HallList
             halls={halls}
             handleModal={handleModal}
           />
-        </ConfStepBody>
-      </AdminConfStep>
+        </ModuleBody>
+      </AdminModule>
 
-      <AdminConfStep>
-        <ConfStepHeader
+      <AdminModule>
+        <ModuleHeader
           header={headers[1]}
           onClick={handleHeader}
         />
-        <ConfStepBody>
-          <ConfigHalls>
+        <ModuleBody>
+          <HallsSwitcher
+            halls={halls}
+            activeHall={activeHall}
+            setActiveHall={setActiveHall}
+            setActiveHallMap={setActiveHallMap}
+          />
 
-            <HallsSwitcher
-              halls={halls}
-              activeHall={activeHall}
-              setActiveHall={setActiveHall}
-              setActiveHallMap={setActiveHallMap}
-            />
+          <SetHallMap
+            activeHall={activeHall}
+            onSubmit={updateHall}
+            activeHallMap={activeHallMap}
+            setActiveHallMap={setActiveHallMap}
+          />
+        </ModuleBody>
+      </AdminModule>
 
-            <SetHallMap
-              activeHall={activeHall}
-              onSubmit={updateHall}
-              activeHallMap={activeHallMap}
-              setActiveHallMap={setActiveHallMap}
-            />
-
-          </ConfigHalls>
-        </ConfStepBody>
-      </AdminConfStep>
-
-      <AdminConfStep>
-        <ConfStepHeader
+      <AdminModule>
+        <ModuleHeader
           header={headers[2]}
           onClick={handleHeader}
         />
-        <ConfStepBody>
-          <ConfigPrices>
-            <HallsSwitcher
-              halls={halls}
-              activeHall={activeHall}
-              setActiveHall={setActiveHall}
-              setActiveHallMap={setActiveHallMap}
-            />
-            <UpdatePricesForm
-              activeHall={activeHall}
-              onSubmit={updatePrices}
-            />
-          </ConfigPrices>
-        </ConfStepBody>
-      </AdminConfStep>
+        <ModuleBody>
+          <HallsSwitcher
+            halls={halls}
+            activeHall={activeHall}
+            setActiveHall={setActiveHall}
+            setActiveHallMap={setActiveHallMap}
+          />
+          <UpdatePricesForm
+            activeHall={activeHall}
+            onSubmit={updatePrices}
+          />
+        </ModuleBody>
+      </AdminModule>
 
-      <AdminConfStep>
-        <ConfStepHeader
+      <AdminModule>
+        <ModuleHeader
           header={headers[3]}
           onClick={handleHeader}
         />
-        <ConfStepBody>
-          <ConfigShows>
-            <p className="conf-step__paragraph">
-              <button
-                type="button"
-                className="conf-step__button conf-step__button-accent"
-                data-action="addMovie"
-                onClick={handleModal}
-              >
-                        Добавить фильм
-              </button>
-            </p>
-            <ConfStepMovies movies={movies} />
-            <AdminNav
-              setChosen={setChosen}
-            />
-            <ConfStepSeances
-              halls={halls}
-              shows={shows}
+        <ModuleBody>
+          <p className="conf-step__paragraph">
+            <button
+              type="button"
+              className="conf-step__button conf-step__button-accent"
+              data-action="addMovie"
               onClick={handleModal}
-            />
-          </ConfigShows>
-        </ConfStepBody>
-      </AdminConfStep>
+            >
+Добавить фильм
+            </button>
+          </p>
+          <ModuleMovies movies={movies} />
+          <AdminNav />
+          <ModuleSeances
+            halls={halls}
+            shows={shows}
+            onClick={handleModal}
+          />
+        </ModuleBody>
+      </AdminModule>
 
-      <AdminConfStep>
-        <ConfStepHeader
+      <AdminModule>
+        <ModuleHeader
           header={activeHall.isOpen === 'false' ? headers[4] : headers[5]}
           onClick={handleHeader}
         />
-        <ConfStepBody isCentered>
+        <ModuleBody isCentered>
           <OpenSales
-            onSubmit={openSales}
+            onOpen={openSales}
             title={activeHall.isOpen === 'false' ? 'Открыть продажу билетов' : 'Закрыть продажу билетов'}
           />
-        </ConfStepBody>
-      </AdminConfStep>
+        </ModuleBody>
+      </AdminModule>
     </>
   );
 
   const NoHallsSlot = (
-    <>
-      <AdminConfStep>
-        <ConfStepHeader
-          header={headers[0]}
-          onClick={handleHeader}
+    <AdminModule>
+      <ModuleHeader
+        header={headers[0]}
+        onClick={handleHeader}
+      />
+      <ModuleBody>
+        <HallList
+          halls={halls}
+          handleModal={handleModal}
         />
-        <ConfStepBody>
-          <HallList
-            halls={halls}
-            handleModal={handleModal}
-          />
-        </ConfStepBody>
-      </AdminConfStep>
-    </>
+      </ModuleBody>
+    </AdminModule>
   );
 
 
   return (
     <>
-      {ModalSlot}
-      <AdminHeader />
-      <AdminMain>
-        {halls.length === 0 ? NoHallsSlot : HasHallsSlot}
-      </AdminMain>
+      {isLoading ? (
+        <div className="loading">
+          <div className="loader" />
+        </div>
+      ) : (
+        <>
+          {ModalSlot}
+          <AdminHeader isAdminPage />
+          <AdminMain isAdminPage>
+            {halls.length === 0 ? NoHallsSlot : HasHallsSlot}
+          </AdminMain>
+        </>
+      )}
     </>
   );
 };
@@ -222,9 +219,8 @@ AdminPage.propTypes = {
   setActiveHall: PropTypes.func.isRequired,
   setActiveHallMap: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  activeHallMap: PropTypes.array.isRequired,
+  activeHallMap: PropTypes.arrayOf(PropTypes.array.isRequired).isRequired,
   movies: PropTypes.arrayOf.isRequired,
-  setChosen: PropTypes.func.isRequired,
   shows: PropTypes.arrayOf(PropTypes.object).isRequired,
   openSales: PropTypes.func.isRequired,
   handleHeader: PropTypes.func.isRequired,
@@ -232,4 +228,4 @@ AdminPage.propTypes = {
 };
 
 
-export default withCrud(withAdminState(withAdminLogic(AdminPage)));
+export default withCrud(withAdminState(withLoadingScreen(withAdminLogic(AdminPage))));

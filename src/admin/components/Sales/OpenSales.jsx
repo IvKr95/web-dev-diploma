@@ -1,8 +1,12 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function OpenSales(props) {
-  const { onSubmit: openSales, title } = props;
+  const {
+    onOpen: openSales,
+    title,
+  } = props;
 
   return (
     <>
@@ -20,7 +24,7 @@ function OpenSales(props) {
 }
 
 OpenSales.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onOpen: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
 };
 

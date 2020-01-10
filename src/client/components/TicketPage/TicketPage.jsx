@@ -1,23 +1,36 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import ClientHeader from '../ClientHeader';
-import ClientMain from '../ClientMain';
+import ClientHeader from '../../../shared-components/Header';
+import ClientMain from '../../../shared-components/Main';
 import Ticket from './Ticket';
 import DateContext from '../../../contexts/DateContext';
 import withCrud from '../../../hoc/WithCrud';
 import Order from '../../models/Order';
 import updateHallMap from '../../js/updateHallMap';
 import '../../css/client.css';
+import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 
 
 const TicketPage = (props) => {
-  const { add, update } = props;
-  const { state } = props.location;
+  const {
+    add, update, location, isLoading, setIsLoading,
+  } = props;
+  const { state } = location;
 
   const [qr, setQr] = useState('');
-  const dateContext = useContext(DateContext);
+  const { chosen } = useContext(DateContext);
+
+  useEffect(() => {
+    if (state && state.fromDisplayPayment) {
+      const { data, newOrder, hallMap } = state;
+      addOrder(data, newOrder, hallMap);
+    }
+  }, []);
 
   const updateHall = (id, map) => {
     update({
@@ -29,18 +42,12 @@ const TicketPage = (props) => {
     });
   };
 
-  useEffect(() => {
-    if (state && state.fromDisplayPayment) {
-      const { data, newOrder, hallMap } = state;
-      addOrder(data, newOrder, hallMap);
-    }
-  }, []);
-
   const addOrder = (data, order, hallMap) => {
+    setIsLoading(true);
     add({
       url: `${process.env.REACT_APP_INDEX_URL}/orders`,
       body: JSON.stringify({
-        date: dateContext,
+        date: chosen,
         hall: data.hall,
         movieId: data.movieId,
         time: data.time.time,
@@ -50,6 +57,7 @@ const TicketPage = (props) => {
       callback: (src) => {
         updateHall(data.time.showId, hallMap);
         setQr(src);
+        setIsLoading(false);
       },
       responseType: 'blob',
     });
@@ -62,7 +70,12 @@ const TicketPage = (props) => {
           <ClientUI>
             <ClientHeader />
             <ClientMain>
-              <Ticket data={state.data} qr={qr} />
+              {isLoading ? (
+                <div className="loading">
+                  <div className="loader" />
+                </div>
+              ) : <Ticket data={state.data} seats={state.seats} qr={qr} />}
+
             </ClientMain>
           </ClientUI>
         ) : <Redirect />
@@ -73,10 +86,12 @@ const TicketPage = (props) => {
 
 TicketPage.propTypes = {
   location: PropTypes.object.isRequired,
+  add: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
   data: PropTypes.objectOf(PropTypes.string).isRequired,
   newOrder: PropTypes.instanceOf(Order).isRequired,
   hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
 };
 
 
-export default withCrud(TicketPage);
+export default withCrud(withLoadingScreen(TicketPage));

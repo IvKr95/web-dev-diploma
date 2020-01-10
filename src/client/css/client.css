@@ -6,10 +6,6 @@
           box-sizing: border-box;
 }
 
-a {
-  text-decoration: none;
-}
-
 html {
   font-family: "Roboto", sans-serif;
   font-size: 62.5%;
@@ -22,8 +18,25 @@ body {
   background-position: right;
 }
 
+a {
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+}
+
 .page-header {
   padding: 1.4rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-left: 60px;
+  padding-right: 60px;
 }
 
 .page-header__title {
@@ -36,6 +49,51 @@ body {
 
 .page-header__title span {
   font-weight: 100;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.loader {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 16px solid #f3f3f3;
+  /* Light grey */
+  border-top: 16px solid #3498db;
+  /* Blue */
+  top: calc(50% - 75px);
+  left: calc(50% - 75px);
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+  -webkit-animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 /* ~~~~~~~~~~~~ Кинозал ~~~~~~~~~~~~ */

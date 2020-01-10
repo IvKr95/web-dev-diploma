@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 class Ticket {
   constructor(row, seat, type, price) {
     this.row = row;

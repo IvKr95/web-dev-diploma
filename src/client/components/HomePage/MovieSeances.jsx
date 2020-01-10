@@ -1,18 +1,25 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const MovieSeances = (props) => {
-  const { shows, movieName, movieId } = props;
+  const {
+    shows,
+    movieName,
+    movieId,
+  } = props;
   const [showsList, setShowsList] = useState([]);
 
   useEffect(() => {
     if (shows) {
-      setNewShows(shows);
+      setNewShows();
     }
   }, []);
 
-  const setNewShows = (shows) => {
+  const setNewShows = () => {
     const newShows = Object.entries(shows);
     setShowsList(newShows);
   };
@@ -52,9 +59,14 @@ const MovieSeances = (props) => {
 };
 
 MovieSeances.propTypes = {
-  shows: PropTypes.object.isRequired,
-  movieName: PropTypes.string.isRequired,
-  movieId: PropTypes.string.isRequired,
+  shows: PropTypes.objectOf(PropTypes.array.isRequired).isRequired,
+  movieName: PropTypes.string,
+  movieId: PropTypes.string,
+};
+
+MovieSeances.defaultProps = {
+  movieName: '',
+  movieId: '',
 };
 
 export default MovieSeances;
