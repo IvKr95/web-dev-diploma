@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,7 +7,10 @@ const ACTIVE_POPUP = 'popup active';
 const NOT_ACTIVE_POPUP = 'popup';
 
 function Modal(props) {
-  const { isModalActive, children } = props;
+  const {
+    isModalActive,
+    children,
+  } = props;
 
   return (
     <div className={isModalActive ? ACTIVE_POPUP : NOT_ACTIVE_POPUP}>

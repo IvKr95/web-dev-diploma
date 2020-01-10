@@ -6,6 +6,10 @@
           box-sizing: border-box;
 }
 
+button {
+  border: none;
+}
+
 @-webkit-keyframes slideFromTop {
   0% {
     top: -50vh;
@@ -711,6 +715,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   font-size: 2.2rem;
   font-weight: 700;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .login__label {

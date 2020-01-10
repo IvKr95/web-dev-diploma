@@ -1,8 +1,13 @@
+/* eslint-disable linebreak-style */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function ModalHeader(props) {
-  const { action, onClose: handleClose } = props;
+  const {
+    action,
+    onClose: handleClose,
+  } = props;
 
   return (
     <div className="popup__header">
