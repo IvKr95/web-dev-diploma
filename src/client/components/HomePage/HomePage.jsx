@@ -14,7 +14,8 @@ import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import DateContext from '../../../contexts/DateContext';
 import '../../css/client.css';
 
-const HomePage = ({ list, isLoading, setIsLoading }) => {
+const HomePage = (props) => {
+  const { list, isLoading, setIsLoading } = props;
   const [shows, setShows] = useState([]);
   const { chosen } = useContext(DateContext);
 

@@ -9,11 +9,11 @@ import ClientHeader from '../../../shared-components/Header';
 import ClientMain from '../../../shared-components/Main';
 import Ticket from './Ticket';
 import DateContext from '../../../contexts/DateContext';
+import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import withCrud from '../../../hoc/WithCrud';
 import Order from '../../models/Order';
 import updateHallMap from '../../js/updateHallMap';
 import '../../css/client.css';
-import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 
 
 const TicketPage = (props) => {
@@ -32,6 +32,15 @@ const TicketPage = (props) => {
     }
   }, []);
 
+  // const sendEmail = (email) => {
+  //   fetch('http://localhost/my-app/backend/sendemail.php', {
+  //     method: 'POST',
+  //     body: {
+  //       email,
+  //     },
+  //   }).then(() => console.log('success'));
+  // };
+
   const updateHall = (id, map) => {
     update({
       url: `${process.env.REACT_APP_INDEX_URL}/${id}`,
@@ -49,7 +58,7 @@ const TicketPage = (props) => {
       body: JSON.stringify({
         date: chosen,
         hall: data.hall,
-        movieId: data.movieId,
+        movieName: data.movieName,
         time: data.time.time,
         orderId: order.id,
         tickets: JSON.stringify(order.tickets),

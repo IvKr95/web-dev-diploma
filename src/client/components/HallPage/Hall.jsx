@@ -1,5 +1,8 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-use-before-define */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';

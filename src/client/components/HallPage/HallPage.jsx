@@ -63,39 +63,24 @@ const HallPage = (props) => {
       {
         state && state.fromHomePage
           ? (
-            isLoading ? (
-              <ClientUI>
-                <ClientHeader />
+            <ClientUI>
+              <ClientHeader />
 
-                <ClientMain>
-                  <div className="loading">
-                    <div className="loader" />
-                  </div>
-                  <Hall
-                    data={params}
-                    hall={hall}
-                    hallMap={hallMap}
-                    setHallMap={setHallMap}
-                  />
-                </ClientMain>
-              </ClientUI>
-            ) : (
-              <ClientUI>
-                <ClientHeader />
-
-                <ClientMain>
-                  <Hall
-                    data={params}
-                    hall={hall}
-                    hallMap={hallMap}
-                    setHallMap={setHallMap}
-                  />
-                </ClientMain>
-              </ClientUI>
-            )
-          )
-
-          : <Redirect to="/" />
+              <ClientMain>
+                {isLoading && (
+                <div className="loading">
+                  <div className="loader" />
+                </div>
+                )}
+                <Hall
+                  data={params}
+                  hall={hall}
+                  hallMap={hallMap}
+                  setHallMap={setHallMap}
+                />
+              </ClientMain>
+            </ClientUI>
+          ) : <Redirect to="/" />
       }
     </>
   );
