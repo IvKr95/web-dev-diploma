@@ -22,7 +22,7 @@ function Header({ isAdminPage, logout }) {
 кино
 
         </Link>
-        {isAdminPage ? <span className="page-header__subtitle">Администраторская</span> : ''}
+        {isAdminPage && <span className="page-header__subtitle">Администраторская</span>}
       </h1>
 
       {!isLoggedIn
@@ -44,8 +44,12 @@ Logout
 }
 
 Header.propTypes = {
-  isAdminPage: PropTypes.bool.isRequired,
+  isAdminPage: PropTypes.bool,
   logout: PropTypes.func.isRequired,
+};
+
+Header.defaultProps = {
+  isAdminPage: false,
 };
 
 

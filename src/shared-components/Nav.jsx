@@ -1,12 +1,13 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+
 import React, { useState, useContext } from 'react';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import DateContext from '../contexts/DateContext';
 import NavTab from './NavTab';
 import 'moment/locale/ru';
 
-const Nav = (props) => {
+const Nav = () => {
   const [days, setDays] = useState([
     moment(),
     moment().add(1, 'd'),
@@ -57,10 +58,6 @@ const Nav = (props) => {
       />
     </nav>
   );
-};
-
-Nav.propTypes = {
-  setChosen: PropTypes.func.isRequired,
 };
 
 export default Nav;

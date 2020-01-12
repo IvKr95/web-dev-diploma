@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 function Main({ children, isAdminPage }) {
   return (
-    <main className={isAdminPage ? 'conf-steps' : null}>
+    <main className={isAdminPage ? 'conf-steps' : ''}>
       {children}
     </main>
   );
@@ -12,7 +12,11 @@ function Main({ children, isAdminPage }) {
 
 Main.propTypes = {
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
-  isAdminPage: PropTypes.bool.isRequired,
+  isAdminPage: PropTypes.bool,
+};
+
+Main.defaultProps = {
+  isAdminPage: false,
 };
 
 export default Main;
