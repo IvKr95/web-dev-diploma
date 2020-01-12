@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const handleDragStart = (e) => {
   const el = e.target;
   el.classList.add('hold');
