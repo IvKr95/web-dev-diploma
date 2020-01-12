@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 class Movie {
   constructor(id, movieData) {
     this.id = id;

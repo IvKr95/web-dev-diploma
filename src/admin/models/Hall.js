@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 class Hall {
   constructor(id, name) {
     this.id = id;
