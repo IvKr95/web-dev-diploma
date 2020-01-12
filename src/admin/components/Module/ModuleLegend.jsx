@@ -27,11 +27,11 @@ function ModuleLegend() {
       <div className="conf-step__legend">
         {
           SEAT_TYPES.map((st) => (
-            <>
+            <React.Fragment key={`${st.type}_${st.desc}`}>
               <span className={`conf-step__chair conf-step__chair_${st.type}`} />
               {' '}
               {st.desc}
-            </>
+            </React.Fragment>
           ))
         }
         <p className="conf-step__hint">

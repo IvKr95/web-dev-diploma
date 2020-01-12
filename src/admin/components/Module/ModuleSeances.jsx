@@ -21,7 +21,7 @@ function ModuleSeances(props) {
       {
         halls.map(
           (hall) => (
-            <ModuleHall hall={hall} shows={shows} onDrop={handleDrop} onClick={handleModal} />
+            <ModuleHall key={hall.hallName} hall={hall} shows={shows} onDrop={handleDrop} onClick={handleModal} />
           ),
         )
       }

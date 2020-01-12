@@ -18,7 +18,7 @@ function ModuleHall(props) {
   const { hallName } = hall;
 
   return (
-    <div className="conf-step__seances-hall" key={hallName}>
+    <div className="conf-step__seances-hall">
       <h3 className="conf-step__seances-title">{hallName}</h3>
       <div
         className="conf-step__seances-timeline"
@@ -29,7 +29,7 @@ function ModuleHall(props) {
         onDrop={handleDrop}
       >
         {
-          shows.map((show) => <ModuleShow show={show} hallName={hallName} onClick={handleModal} />)
+          shows.map((show) => <ModuleShow key={show.showId} show={show} hallName={hallName} onClick={handleModal} />)
         }
       </div>
     </div>

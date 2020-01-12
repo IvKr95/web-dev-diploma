@@ -8,7 +8,7 @@ const DEFAULT_PRICES = {
   vipPrice: '',
 };
 
-const UpdatePricesForm = (props) => {
+const UpdatePrices = (props) => {
   const {
     activeHall,
     onSubmit: updatePrices,
@@ -87,7 +87,7 @@ VIP кресла
   );
 };
 
-UpdatePricesForm.propTypes = {
+UpdatePrices.propTypes = {
   activeHall: PropTypes.shape({
     hallName: PropTypes.string,
     hallSchema: PropTypes.string,
@@ -102,4 +102,4 @@ UpdatePricesForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default UpdatePricesForm;
+export default UpdatePrices;

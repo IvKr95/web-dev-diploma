@@ -22,7 +22,6 @@ function ModuleShow(props) {
         && (
         <div
           className="conf-step__seances-movie"
-          key={show.showId}
           style={{ ...SHOW_MOVIE_CSS, left: `${leftPos}px` }}
         >
           <button
