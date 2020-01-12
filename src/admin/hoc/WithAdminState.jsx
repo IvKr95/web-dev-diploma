@@ -1,3 +1,6 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../css/admin.css';
