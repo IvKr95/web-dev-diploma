@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const withCrud = (Component) => {
   const WithCrud = (props) => {
-    const get = (data, setter) => {
+    const get = (data) => {
       axios.get(data.url, {
         params: data.body,
       })
@@ -16,12 +16,11 @@ const withCrud = (Component) => {
           if (response.status === 200) {
             if (data.parsify) {
               const map = JSON.parse(response.data.hallMap);
-              setter(map);
+              data.callback(map);
+              // setter(map);
             } else {
-              setter(response.data);
-            }
-            if (data.callback) {
-              data.callback();
+              data.callback(response.data);
+              // setter(response.data);
             }
           }
         })
@@ -52,11 +51,11 @@ const withCrud = (Component) => {
         })
         .catch((error) => {
           if (error.response) {
-            throw new Error(error.response);
+            console.log(error.response);
           } else if (error.request) {
-            throw new Error(error.request);
+            console.log(error.request);
           } else {
-            throw new Error(error.message);
+            console.log(error.message);
           }
         });
     };
