@@ -11,7 +11,7 @@ function Main({ children, isAdminPage }) {
 }
 
 Main.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   isAdminPage: PropTypes.bool,
 };
 
