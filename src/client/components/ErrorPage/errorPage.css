@@ -1,16 +1,16 @@
-.error-page_box {
+.error {
     width: 500px;
     height: 300px;
     margin: 50px auto;
 }
 
-.error-box_content {
+.error__content {
     padding-top: 50px;
     padding-bottom: 50px;
     text-align: center;
 }
 
-.error-box_text {
+.error__text {
     color: black;
     font-size: 40px;
     font-weight: 700;

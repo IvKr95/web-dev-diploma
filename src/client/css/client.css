@@ -51,51 +51,6 @@ button {
   font-weight: 100;
 }
 
-.loading {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.loader {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border: 16px solid #f3f3f3;
-  /* Light grey */
-  border-top: 16px solid #3498db;
-  /* Blue */
-  top: calc(50% - 75px);
-  left: calc(50% - 75px);
-  border-radius: 50%;
-  animation: spin 2s linear infinite;
-  -webkit-animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
 /* ~~~~~~~~~~~~ Кинозал ~~~~~~~~~~~~ */
 .acceptin-button {
   display: block;
@@ -452,6 +407,130 @@ button {
   color: #000000;
   text-decoration: none;
   font-size: 1.5rem;
+}
+
+/* ~~~~~~~~~~~~ Билет ~~~~~~~~~~~~ */
+.tichet__check, .ticket__info-wrapper {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: rgba(241, 235, 230, 0.95);
+}
+
+.tichet__check {
+  position: relative;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.tichet__check::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(../i/border-top.png);
+  background-size: 10px 3px;
+}
+
+.tichet__check::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(../i/border-bottom.png);
+  background-size: 10px 3px;
+}
+
+.ticket__info-wrapper {
+  position: relative;
+  margin-top: 6px;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.ticket__info-wrapper::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(../i/border-top.png);
+  background-size: 10px 3px;
+}
+
+.ticket__info-wrapper::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-image: url(../i/border-bottom.png);
+  background-size: 10px 3px;
+}
+
+.ticket__check-title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  color: #C76F00;
+}
+
+.ticket__info {
+  font-size: 1.6rem;
+  color: #000000;
+}
+
+.ticket__info + .ticket__info {
+  margin-top: 1rem;
+}
+
+.ticket__details {
+  font-weight: 700;
+}
+
+.ticket__hint {
+  font-weight: 300;
+  font-size: 1.4rem;
+  margin-top: 3rem;
+}
+
+.ticket__hint + .ticket__hint {
+  margin-top: 1rem;
+}
+
+.ticket__info-qr {
+  display: block;
+  margin: 3rem auto 0;
+  width: 20rem;
+  height: 20rem;
+}
+
+@media screen and (min-width: 479px) {
+  .page-nav .page-nav__day {
+    padding: 1rem 2rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .page-header, nav, main {
+    width: 990px;
+    margin: auto;
+  }
+  .movie, .buying {
+    border-radius: 2px;
+  }
+  .buying__info-hint {
+    display: none;
+  }
 }
 
 /* ~~~~~~~~~~~~ Билет ~~~~~~~~~~~~ */
