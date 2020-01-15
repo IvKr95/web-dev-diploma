@@ -10,8 +10,9 @@ const linkStyle = {
   textDecoration: 'none',
 };
 
-function Header({ isAdminPage, logout }) {
+function Header(props) {
   const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
+  const { isAdminPage, logout } = props;
 
   return (
     <header className="page-header">
