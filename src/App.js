@@ -19,6 +19,7 @@ import AdminPage from './admin/components/AdminPage';
 import DateContext from './contexts/DateContext';
 import LoginContext from './contexts/LoginContext';
 import withAuthorization from './hoc/WithAuthorization';
+import './App.css';
 
 const App = ({ fetch }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

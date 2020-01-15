@@ -2,22 +2,51 @@
 /* eslint-disable no-use-before-define */
 
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import ClientHeader from '../../../shared-components/Header';
-import ClientMain from '../../../shared-components/Main';
+import Header from '../../../shared-components/Header';
+import Main from '../../../shared-components/Main';
 import Hall from './Hall';
+import LoadingScreen from '../../../shared-components/LoadingScreen';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import withCrud from '../../../hoc/WithCrud';
+import HallInfo from './HallInfo';
+import HallSchema from './HallSchema';
+import HallSchemaLegend from './HallSchemaLegend';
 import '../../css/client.css';
+
+const ACTIVE_LINK_CSS = {
+  pointerEvents: 'auto',
+  backgroundColor: '#16A6AF',
+};
+
+const INACTIVE_LINK_CSS = {
+  pointerEvents: 'none',
+  backgroundColor: 'grey',
+};
 
 
 const HallPage = (props) => {
-  const { get, isLoading, setIsLoading } = props;
-  const { params, state } = props.location;
+  const {
+    get,
+    isLoading,
+    setIsLoading,
+    location,
+  } = props;
+  const { params, state } = location;
   const [hall, setHall] = useState({});
   const [hallMap, setHallMap] = useState([]);
+  const [tickets, setTickets] = useState([]);
+  const [isLinkActive, setIsLinkActive] = useState(false);
+
+  useEffect(() => {
+    if (tickets.length > 0) {
+      setIsLinkActive(true);
+    } else {
+      setIsLinkActive(false);
+    }
+  }, [tickets.length]);
 
   useEffect(() => {
     if (state && state.fromHomePage) {
@@ -36,10 +65,11 @@ const HallPage = (props) => {
         param: params.hall,
       },
       parsify: false,
-      callback() {
+      callback(newHall) {
         setIsLoading(false);
+        setHall(newHall);
       },
-    }, setHall);
+    });
   };
 
   const fetchShowData = () => {
@@ -52,10 +82,11 @@ const HallPage = (props) => {
         param: params.time.showId,
       },
       parsify: true,
-      callback() {
+      callback(newHallMap) {
         setIsLoading(false);
+        setHallMap(newHallMap);
       },
-    }, setHallMap);
+    });
   };
 
   return (
@@ -64,21 +95,44 @@ const HallPage = (props) => {
         state && state.fromHomePage
           ? (
             <ClientUI>
-              <ClientHeader />
+              <Header />
+              <Main>
+                {isLoading && <LoadingScreen />}
 
-              <ClientMain>
-                {isLoading && (
-                <div className="loading">
-                  <div className="loader" />
-                </div>
-                )}
                 <Hall
-                  data={params}
-                  hall={hall}
                   hallMap={hallMap}
                   setHallMap={setHallMap}
-                />
-              </ClientMain>
+                >
+                  <HallInfo data={params} />
+                  <HallSchema
+                    hallMap={hallMap}
+                    setHallMap={setHallMap}
+                    hall={hall}
+                    setTickets={setTickets}
+                  >
+                    <HallSchemaLegend hall={hall} />
+                  </HallSchema>
+                  <Link
+                    className="acceptin-button"
+                    style={isLinkActive ? ACTIVE_LINK_CSS : INACTIVE_LINK_CSS}
+                    to={{
+                      pathname: '/payment',
+                      params: {
+                        tickets,
+                        data: params,
+                        hallMap,
+                        setHallMap,
+                      },
+                      state: {
+                        fromHallPage: true,
+                      },
+                    }}
+                    role="button"
+                  >
+Забронировать
+                  </Link>
+                </Hall>
+              </Main>
             </ClientUI>
           ) : <Redirect to="/" />
       }
@@ -87,7 +141,23 @@ const HallPage = (props) => {
 };
 
 HallPage.propTypes = {
-
+  get: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
+  location: PropTypes.shape({
+    params: PropTypes.shape({
+      hall: PropTypes.string.isRequired,
+      movieId: PropTypes.string.isRequired,
+      movieName: PropTypes.string.isRequired,
+      time: PropTypes.shape({
+        showId: PropTypes.string.isRequired,
+        time: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+    state: PropTypes.shape({
+      fromHomePage: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default withCrud(withLoadingScreen(HallPage));

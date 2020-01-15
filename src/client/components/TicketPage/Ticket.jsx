@@ -55,10 +55,14 @@ function Ticket(props) {
 
 Ticket.propTypes = {
   data: PropTypes.shape({
-    movieName: PropTypes.string.isRequired,
     hall: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired,
+    movieName: PropTypes.string.isRequired,
+    time: PropTypes.shape({
+      showId: PropTypes.string.isRequired,
+      time: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
+  seats: PropTypes.arrayOf(PropTypes.object).isRequired,
   qr: PropTypes.string.isRequired,
 };
 

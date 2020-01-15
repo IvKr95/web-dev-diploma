@@ -5,6 +5,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Order from '../../models/Order';
+import Seats from './Seats';
 
 const Payment = (props) => {
   const {
@@ -32,16 +33,7 @@ const Payment = (props) => {
         <p className="ticket__info">
 Места:
           {' '}
-          {seats.map((s) => (
-            <>
-Ряд:
-              {' '}
-              <span className="ticket__details ticket__chairs">{s.row}</span>
-Место:
-              {' '}
-              <span className="ticket__details ticket__chairs">{s.seat}</span>
-            </>
-          ))}
+          {seats.map((s) => <Seats key={`${s.row}_${s.seat}`} row={s.row} seat={s.seat} />)}
         </p>
         <p className="ticket__info">
 В зале:
@@ -90,9 +82,19 @@ const Payment = (props) => {
 };
 
 Payment.propTypes = {
-  data: PropTypes.objectOf(PropTypes.string).isRequired,
+  data: PropTypes.shape({
+    hall: PropTypes.string.isRequired,
+    movieName: PropTypes.string.isRequired,
+    time: PropTypes.object.isRequired,
+  }).isRequired,
   newOrder: PropTypes.instanceOf(Order).isRequired,
   hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+  totalPrice: PropTypes.number,
+  seats: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+Payment.defaultProps = {
+  totalPrice: 0,
 };
 
 export default Payment;

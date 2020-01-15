@@ -6,8 +6,8 @@ import { Redirect } from 'react-router-dom';
 import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import ClientHeader from '../../../shared-components/Header';
-import ClientMain from '../../../shared-components/Main';
+import Header from '../../../shared-components/Header';
+import Main from '../../../shared-components/Main';
 import Payment from './Payment';
 import Order from '../../models/Order';
 import '../../css/client.css';
@@ -55,9 +55,9 @@ const PaymentPage = ({ location }) => {
       {
         state && state.fromHallPage && tickets.length > 0 ? (
           <ClientUI>
-            <ClientHeader />
+            <Header />
 
-            <ClientMain>
+            <Main>
               <Payment
                 data={data}
                 hallMap={hallMap}
@@ -65,7 +65,7 @@ const PaymentPage = ({ location }) => {
                 totalPrice={totalPrice}
                 seats={seats}
               />
-            </ClientMain>
+            </Main>
           </ClientUI>
         ) : <Redirect />
       }
@@ -74,9 +74,20 @@ const PaymentPage = ({ location }) => {
 };
 
 PaymentPage.propTypes = {
-  data: PropTypes.objectOf(PropTypes.string).isRequired,
-  tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+  location: PropTypes.shape({
+    params: PropTypes.shape({
+      tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
+      data: PropTypes.shape({
+        hall: PropTypes.string.isRequired,
+        movieName: PropTypes.string.isRequired,
+        time: PropTypes.object.isRequired,
+      }).isRequired,
+      hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+    }).isRequired,
+    state: PropTypes.shape({
+      fromHallPage: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default PaymentPage;

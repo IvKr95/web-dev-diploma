@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
 import ClientHeader from '../../../shared-components/Header';
+import LoadingScreen from '../../../shared-components/LoadingScreen';
 import ClientMain from '../../../shared-components/Main';
 import Ticket from './Ticket';
 import DateContext from '../../../contexts/DateContext';
@@ -18,7 +19,11 @@ import '../../css/client.css';
 
 const TicketPage = (props) => {
   const {
-    add, update, location, isLoading, setIsLoading,
+    add,
+    update,
+    location,
+    isLoading,
+    setIsLoading,
   } = props;
   const { state } = location;
 
@@ -32,38 +37,28 @@ const TicketPage = (props) => {
     }
   }, []);
 
-  // const sendEmail = (email) => {
-  //   fetch('http://localhost/my-app/backend/sendemail.php', {
-  //     method: 'POST',
-  //     body: {
-  //       email,
-  //     },
-  //   }).then(() => console.log('success'));
-  // };
-
   const updateHall = (id, map) => {
     update({
       url: `${process.env.REACT_APP_INDEX_URL}/${id}`,
-      body: JSON.stringify({
-        action: 'updateHall',
-        hall: JSON.stringify(updateHallMap(map)),
-      }),
+      body: assembleBodyForRequest('updateHall', 'shows', JSON.stringify(updateHallMap(map))),
     });
   };
 
   const addOrder = (data, order, hallMap) => {
+    const dataToSend = {
+      date: chosen,
+      hall: data.hall,
+      movieName: data.movieName,
+      time: data.time.time,
+      orderId: order.id,
+      tickets: JSON.stringify(order.tickets),
+    };
+
     setIsLoading(true);
     add({
-      url: `${process.env.REACT_APP_INDEX_URL}/orders`,
-      body: JSON.stringify({
-        date: chosen,
-        hall: data.hall,
-        movieName: data.movieName,
-        time: data.time.time,
-        orderId: order.id,
-        tickets: JSON.stringify(order.tickets),
-      }),
-      callback: (src) => {
+      url: process.env.REACT_APP_INDEX_URL,
+      body: assembleBodyForRequest('addOrder', 'orders', JSON.stringify(dataToSend)),
+      callback(src) {
         updateHall(data.time.showId, hallMap);
         setQr(src);
         setIsLoading(false);
@@ -72,6 +67,12 @@ const TicketPage = (props) => {
     });
   };
 
+  const assembleBodyForRequest = (action, table, data) => ({
+    action,
+    table,
+    data,
+  });
+
   return (
     <>
       {
@@ -79,12 +80,9 @@ const TicketPage = (props) => {
           <ClientUI>
             <ClientHeader />
             <ClientMain>
-              {isLoading ? (
-                <div className="loading">
-                  <div className="loader" />
-                </div>
-              ) : <Ticket data={state.data} seats={state.seats} qr={qr} />}
-
+              {isLoading
+                ? <LoadingScreen />
+                : <Ticket data={state.data} seats={state.seats} qr={qr} />}
             </ClientMain>
           </ClientUI>
         ) : <Redirect />
@@ -94,13 +92,26 @@ const TicketPage = (props) => {
 };
 
 TicketPage.propTypes = {
-  location: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      fromDisplayPayment: PropTypes.bool.isRequired,
+      data: PropTypes.shape({
+        hall: PropTypes.string.isRequired,
+        movieName: PropTypes.string.isRequired,
+        time: PropTypes.shape({
+          showId: PropTypes.string.isRequired,
+          time: PropTypes.string.isRequired,
+        }).isRequired,
+      }).isRequired,
+      seats: PropTypes.arrayOf(PropTypes.object).isRequired,
+      newOrder: PropTypes.instanceOf(Order).isRequired,
+      hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+    }).isRequired,
+  }).isRequired,
   add: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
-  data: PropTypes.objectOf(PropTypes.string).isRequired,
-  newOrder: PropTypes.instanceOf(Order).isRequired,
-  hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
 };
-
 
 export default withCrud(withLoadingScreen(TicketPage));

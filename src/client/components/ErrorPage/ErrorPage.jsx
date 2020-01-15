@@ -4,9 +4,9 @@ import './errorPage.css';
 
 function ErrorPage() {
   return (
-    <div className="error-page_box">
-      <div className="error-box_content">
-        <span className="error-box_text">Page Not Exist</span>
+    <div className="error">
+      <div className="error__content">
+        <span className="error__text">Page Not Exist</span>
       </div>
     </div>
   );
