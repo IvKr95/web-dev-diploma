@@ -48,11 +48,12 @@ const withAdminLogic = (Component) => {
 
     const fetchHalls = () => {
       list({
-        url: process.env.REACT_APP_ADMIN_URL,
+        url: process.env.REACT_APP_INDEX_URL,
         params: {
+          action: 'getHalls',
           table: 'halls',
         },
-        callback: (data) => {
+        callback(data) {
           if (data.length > 0) {
             setHalls(data);
             setActiveHall(data[0]);
@@ -64,11 +65,12 @@ const withAdminLogic = (Component) => {
 
     const fetchMovies = () => {
       list({
-        url: process.env.REACT_APP_ADMIN_URL,
+        url: process.env.REACT_APP_INDEX_URL,
         params: {
+          action: 'getMovies',
           table: 'movies',
         },
-        callback: (data) => {
+        callback(data) {
           setMovies(data);
         },
       });
@@ -76,27 +78,28 @@ const withAdminLogic = (Component) => {
 
     const fetchShows = () => {
       list({
-        url: process.env.REACT_APP_ADMIN_URL,
+        url: process.env.REACT_APP_INDEX_URL,
         params: {
+          action: 'getShows',
           table: 'shows',
-          date: chosen,
+          param: chosen,
         },
-        callback: (data) => {
+        callback(data) {
           setShows(data);
           setIsLoading(false);
         },
       });
     };
 
-    const handleModal = (e, item) => {
+    const handleModal = (event, item) => {
       setActiveModal(!isModalActive);
-      handleAction(e, item);
+      handleAction(event, item);
     };
 
-    const handleAction = (e, item) => {
+    const handleAction = (event, item) => {
       let newAction;
-      if (e) {
-        newAction = e.currentTarget.dataset.action;
+      if (event) {
+        newAction = event.currentTarget.dataset.action;
       } else {
         newAction = '';
       }
@@ -107,14 +110,15 @@ const withAdminLogic = (Component) => {
       }
     };
 
-    const handleDelete = (e) => {
-      e.preventDefault();
+    const handleDelete = (event) => {
+      event.preventDefault();
 
       if (action === 'deleteHall') {
         remove({
           url: process.env.REACT_APP_ADMIN_URL,
           params: {
             action: 'deleteShows',
+            table: 'shows',
             target: itemToDelete,
           },
           callback: () => {
@@ -122,6 +126,7 @@ const withAdminLogic = (Component) => {
               url: process.env.REACT_APP_ADMIN_URL,
               params: {
                 action,
+                table: 'halls',
                 target: itemToDelete,
               },
               callback: () => {
@@ -136,6 +141,7 @@ const withAdminLogic = (Component) => {
           url: process.env.REACT_APP_ADMIN_URL,
           params: {
             action,
+            table: 'shows',
             target: itemToDelete.showId,
           },
           callback: () => {
@@ -145,18 +151,19 @@ const withAdminLogic = (Component) => {
       }
 
       setItemToDelete('');
-      handleModal(e);
+      handleModal(event);
     };
 
-    const openSales = (e) => {
+    const openSales = (event) => {
       const data = {
         state: activeHall.isOpen === 'false' ? 'true' : 'false',
       };
 
       update({
-        url: `${process.env.REACT_APP_ADMIN_URL}/${activeHall.hallName}`,
+        url: `${process.env.REACT_APP_INDEX_URL}/${activeHall.hallName}`,
         body: {
-          action: e.target.dataset.action,
+          action: event.target.dataset.action,
+          table: 'halls',
           data,
         },
         callback: () => {
@@ -165,16 +172,12 @@ const withAdminLogic = (Component) => {
       });
     };
 
-    const updatePrices = ({ standardPrice, vipPrice }) => {
-      const data = {
-        standardPrice,
-        vipPrice,
-      };
-
+    const updatePrices = (data) => {
       update({
-        url: `${process.env.REACT_APP_ADMIN_URL}/${activeHall.hallName}`,
+        url: `${process.env.REACT_APP_INDEX_URL}/${activeHall.hallName}`,
         body: {
           action: 'updatePrices',
+          table: 'halls',
           data,
         },
         callback: () => {
@@ -191,9 +194,10 @@ const withAdminLogic = (Component) => {
       };
 
       update({
-        url: `${process.env.REACT_APP_ADMIN_URL}/${activeHall.hallName}`,
+        url: `${process.env.REACT_APP_INDEX_URL}/${activeHall.hallName}`,
         body: {
           action: 'setHallMap',
+          table: 'halls',
           data,
         },
         callback: () => {
@@ -202,8 +206,8 @@ const withAdminLogic = (Component) => {
       });
     };
 
-    const handleHeader = (e) => {
-      const { name } = e.currentTarget.dataset;
+    const handleHeader = (event) => {
+      const { name } = event.currentTarget.dataset;
 
       setHeaders((prev) => {
         prev.forEach((h) => {
@@ -218,7 +222,6 @@ const withAdminLogic = (Component) => {
     const addShow = (show) => {
       let newShow;
       const hallMap = [];
-      const body = new FormData();
 
       for (let row = 0; row < activeHallMap.length; row++) {
         hallMap.push([]);
@@ -249,42 +252,43 @@ const withAdminLogic = (Component) => {
         }
       }
 
-      body.append('action', action);
-      body.append('data', JSON.stringify(newShow));
-
       add({
-        url: `${process.env.REACT_APP_ADMIN_URL}/shows`,
-        body,
-        callback: () => {
+        url: process.env.REACT_APP_INDEX_URL,
+        body: {
+          action,
+          table: 'shows',
+          data: JSON.stringify(newShow),
+        },
+        callback() {
           fetchShows();
         },
       });
     };
 
     const addHall = (data) => {
-      const body = new FormData();
-      body.append('action', action);
-      body.append('data', JSON.stringify(data));
-
       add({
-        url: process.env.REACT_APP_ADMIN_URL,
-        body,
-        callback: () => {
+        url: process.env.REACT_APP_INDEX_URL,
+        body: {
+          action,
+          table: 'halls',
+          data: JSON.stringify(data),
+        },
+        callback() {
           fetchHalls();
         },
       });
     };
 
     const addMovie = (data) => {
-      const body = new FormData();
-      body.append('action', action);
-      body.append('poster', data.poster);
-      body.append('data', JSON.stringify(data));
-
       add({
-        url: process.env.REACT_APP_ADMIN_URL,
-        body,
-        callback: () => {
+        url: process.env.REACT_APP_INDEX_URL,
+        body: {
+          action,
+          table: 'movies',
+          data: JSON.stringify(data),
+          poster: data.poster,
+        },
+        callback() {
           fetchMovies();
         },
       });
