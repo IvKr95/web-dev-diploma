@@ -4,11 +4,11 @@ import Header from '../shared-components/Header';
 import Main from '../shared-components/Main';
 import LoginForm from './LoginForm';
 
+// Страница логина
 function LoginPage() {
   return (
     <>
       <Header isAdminPage />
-
       <Main>
         <LoginForm />
       </Main>

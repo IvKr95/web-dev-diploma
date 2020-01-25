@@ -4,17 +4,23 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import DateContext from '../contexts/DateContext';
 
+// Класс применяемый к текущей дате
 const NAV_TODAY = 'page-nav__day page-nav__day_today';
+// Класс применяемый к выбранной дате
 const NAV_CHOSEN = 'page-nav__day_chosen';
+// Класс применяемый к выходному дню
 const NAV_WEEKEND = 'page-nav__day_weekend';
 
+// Отображает один блок даты в навигации по датам
 function NavTab(props) {
+  // Используем контекст даты
   const { chosen } = useContext(DateContext);
   const {
     date,
     onChoose: handleChoose,
   } = props;
 
+  // Решаем какие классы буду применены к блоку даты
   const todayClass = date.format('L') === moment().format('L') ? NAV_TODAY : '';
   const chosenClass = date.format('L') === chosen ? NAV_CHOSEN : '';
   const weekendClass = ['сб', 'вс'].includes(date.format('dd')) ? NAV_WEEKEND : '';
@@ -33,7 +39,9 @@ function NavTab(props) {
 }
 
 NavTab.propTypes = {
+  // Объект даты
   date: PropTypes.object.isRequired,
+  // Переключаемся между датами
   onChoose: PropTypes.func.isRequired,
 };
 

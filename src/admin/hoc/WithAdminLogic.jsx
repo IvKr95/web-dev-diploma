@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-use-before-define */
+/* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
@@ -8,8 +9,10 @@ import DateContext from '../../contexts/DateContext';
 import Show from '../models/Show';
 import '../css/admin.css';
 
+// Здесь вся логика admin
 const withAdminLogic = (Component) => {
   const WithAdminLogic = (props) => {
+    // Миллион пропсов
     const {
       list, add, update, remove,
       isModalActive,
@@ -31,6 +34,10 @@ const withAdminLogic = (Component) => {
       movies,
       shows,
       setIsLoading,
+      dragging,
+      setDragging,
+      droppedIn,
+      setDroppedIn,
     } = props;
 
     const { chosen } = useContext(DateContext);
@@ -39,13 +46,14 @@ const withAdminLogic = (Component) => {
       setIsLoading(true);
       fetchHalls();
       fetchMovies();
-      fetchShows();
     }, []);
 
+    // Когда меняется дата, получаем сеансы по ней
     useEffect(() => {
       fetchShows();
     }, [chosen]);
 
+    // Получаем залы
     const fetchHalls = () => {
       list({
         url: process.env.REACT_APP_INDEX_URL,
@@ -58,11 +66,14 @@ const withAdminLogic = (Component) => {
             setHalls(data);
             setActiveHall(data[0]);
             setActiveHallMap(JSON.parse(data[0].hallSchema));
+          } else {
+            setHalls(data);
           }
         },
       });
     };
 
+    // Получаем фильмы
     const fetchMovies = () => {
       list({
         url: process.env.REACT_APP_INDEX_URL,
@@ -76,6 +87,7 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Получаем сеансы
     const fetchShows = () => {
       list({
         url: process.env.REACT_APP_INDEX_URL,
@@ -91,11 +103,13 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Открывает-закрывает модальные окна
     const handleModal = (event, item) => {
       setActiveModal(!isModalActive);
       handleAction(event, item);
     };
 
+    // Устанавливает новое действие для модальных окон
     const handleAction = (event, item) => {
       let newAction;
       if (event) {
@@ -110,12 +124,13 @@ const withAdminLogic = (Component) => {
       }
     };
 
+    // Удаляем что-то, в зависимости от действия
     const handleDelete = (event) => {
       event.preventDefault();
 
       if (action === 'deleteHall') {
         remove({
-          url: process.env.REACT_APP_ADMIN_URL,
+          url: process.env.REACT_APP_INDEX_URL,
           params: {
             action: 'deleteShows',
             table: 'shows',
@@ -123,7 +138,7 @@ const withAdminLogic = (Component) => {
           },
           callback: () => {
             remove({
-              url: process.env.REACT_APP_ADMIN_URL,
+              url: process.env.REACT_APP_INDEX_URL,
               params: {
                 action,
                 table: 'halls',
@@ -138,7 +153,7 @@ const withAdminLogic = (Component) => {
         });
       } else {
         remove({
-          url: process.env.REACT_APP_ADMIN_URL,
+          url: process.env.REACT_APP_INDEX_URL,
           params: {
             action,
             table: 'shows',
@@ -154,6 +169,7 @@ const withAdminLogic = (Component) => {
       handleModal(event);
     };
 
+    // Открываем зал для продаж
     const openSales = (event) => {
       const data = {
         state: activeHall.isOpen === 'false' ? 'true' : 'false',
@@ -172,6 +188,7 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Обновляем цены в зале
     const updatePrices = (data) => {
       update({
         url: `${process.env.REACT_APP_INDEX_URL}/${activeHall.hallName}`,
@@ -186,6 +203,7 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Обновляем разметку зала
     const updateHall = ({ rows, maxSeatsInRow }) => {
       const data = {
         rows,
@@ -206,6 +224,7 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Открывает или закрывает модули
     const handleHeader = (event) => {
       const { name } = event.currentTarget.dataset;
 
@@ -219,25 +238,37 @@ const withAdminLogic = (Component) => {
       });
     };
 
-    const addShow = (show) => {
-      let newShow;
+    // Генерирует новую разметку зала
+    const generateHallMap = (hallName) => {
       const hallMap = [];
+      let chosenHall;
 
-      for (let row = 0; row < activeHallMap.length; row++) {
+      for (const hall of halls) {
+        if (hall.hallName === hallName) {
+          chosenHall = JSON.parse(hall.hallSchema);
+          break;
+        }
+      }
+
+      for (let row = 0; row < chosenHall.length; row++) {
         hallMap.push([]);
 
-        for (let seat = 0; seat < activeHallMap[row].length; seat++) {
+        for (let seat = 0; seat < chosenHall[row].length; seat++) {
           const seatObj = {
-            type: activeHallMap[row][seat],
+            type: chosenHall[row][seat],
             isTaken: false,
-            isAvail: activeHallMap[row][seat] !== 'disabled',
+            isAvail: chosenHall[row][seat] !== 'disabled',
             isSelected: false,
           };
 
           hallMap[row].push(seatObj);
         }
       }
+      return hallMap;
+    };
 
+    // Генерирует новый сеанс
+    const generateNewShow = (show, hallMap) => {
       for (const movie of movies) {
         if (movie.name === show.name) {
           const showData = {
@@ -247,10 +278,15 @@ const withAdminLogic = (Component) => {
             movie: movie.name,
             hallMap: JSON.stringify(hallMap),
           };
-          newShow = new Show(nanoid(), showData);
-          break;
+          return new Show(nanoid(), showData);
         }
       }
+    };
+
+    // Добавляет сеанс
+    const addShow = (show) => {
+      const hallMap = generateHallMap(show.hall);
+      const newShow = generateNewShow(show, hallMap);
 
       add({
         url: process.env.REACT_APP_INDEX_URL,
@@ -265,6 +301,7 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Добавляет зал
     const addHall = (data) => {
       add({
         url: process.env.REACT_APP_INDEX_URL,
@@ -279,15 +316,18 @@ const withAdminLogic = (Component) => {
       });
     };
 
+    // Добавляет фильм
     const addMovie = (data) => {
+      const body = new FormData();
+
+      body.append('action', action);
+      body.append('table', 'movies');
+      body.append('data', JSON.stringify(data));
+      body.append('poster', data.poster);
+
       add({
         url: process.env.REACT_APP_INDEX_URL,
-        body: {
-          action,
-          table: 'movies',
-          data: JSON.stringify(data),
-          poster: data.poster,
-        },
+        body,
         callback() {
           fetchMovies();
         },
@@ -295,6 +335,7 @@ const withAdminLogic = (Component) => {
     };
 
     return (
+      // Еще больше пропсов еее
       <Component
         updatePrices={updatePrices}
         handleHeader={handleHeader}
@@ -316,6 +357,11 @@ const withAdminLogic = (Component) => {
         movies={movies}
         shows={shows}
         openSales={openSales}
+
+        dragging={dragging}
+        droppedIn={droppedIn}
+        setDragging={setDragging}
+        setDroppedIn={setDroppedIn}
         {...props}
       />
     );
@@ -332,6 +378,7 @@ const withAdminLogic = (Component) => {
   return WithAdminLogic;
 };
 
+// Как отображается имя в React DevTools
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }

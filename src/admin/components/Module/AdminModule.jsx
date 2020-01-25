@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Самая наружняя обертка модуля
 function AdminModule({ children }) {
   return (
     <section className="conf-step">

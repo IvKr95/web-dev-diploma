@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+
+// Создает экземляр сеанса
 class Show {
   constructor(id, showData) {
     this.id = id;

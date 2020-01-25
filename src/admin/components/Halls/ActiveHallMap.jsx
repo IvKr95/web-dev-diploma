@@ -1,21 +1,28 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-use-before-define */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable react/no-array-index-key */
 
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const SEAT_TYPES = ['standard', 'vip', 'disabled'];
 
+// Показывает активную карту зала
+// Также обновляет ее
 function ActiveHallMap(props) {
   const {
     activeHallMap,
     setActiveHallMap,
     hallMapParams,
   } = props;
+  const { maxSeatsInRow, rows } = hallMapParams;
 
   useEffect(() => {
-    updateHallMap();
-  }, [hallMapParams.maxSeatsInRow, hallMapParams.rows]);
+    if (rows) {
+      updateHallMap();
+    }
+  }, [maxSeatsInRow, rows]);
 
   const handleChangeSeatType = (prevSeat, row, seat) => {
     let newSeatType;
@@ -35,18 +42,16 @@ function ActiveHallMap(props) {
   };
 
   const updateHallMap = () => {
-    const nRows = hallMapParams.rows;
-    const nSeats = hallMapParams.maxSeatsInRow;
-    const updHallMap = [];
+    const updatedHallMap = [];
 
-    for (let r = 0; r < nRows; r++) {
-      updHallMap[r] = [];
-      for (let s = 0; s < nSeats; s++) {
-        updHallMap[r].push(SEAT_TYPES[0]);
+    for (let row = 0; row < rows; row++) {
+      updatedHallMap[row] = [];
+      for (let seat = 0; seat < maxSeatsInRow; seat++) {
+        updatedHallMap[row].push(SEAT_TYPES[0]);
       }
     }
 
-    setActiveHallMap(updHallMap);
+    setActiveHallMap(updatedHallMap);
   };
 
   return (

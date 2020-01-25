@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+
+// Создает экземляр фильма
 class Movie {
   constructor(id, movieData) {
     this.id = id;

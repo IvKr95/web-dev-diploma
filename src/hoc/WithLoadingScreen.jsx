@@ -2,10 +2,14 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-props-no-spreading */
 
-
 import React, { useState } from 'react';
 
+// Фукнция которая возвращает компонент высшего порядка
+// Сама принимает оборачиваемый компонент
 const withLoadingScreen = (Component) => {
+  // Компонет высшего порядка
+  // Оборачиваем компоненты которым нужен
+  // загрузочный экран пока работаем с сервером
   const WithLoadingScreen = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,6 +26,7 @@ const withLoadingScreen = (Component) => {
   return WithLoadingScreen;
 };
 
+// Задаем отображаемое имя в DevTools
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }

@@ -5,9 +5,9 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import ClientHeader from '../../../shared-components/Header';
+import Header from '../../../shared-components/Header';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
-import ClientMain from '../../../shared-components/Main';
+import Main from '../../../shared-components/Main';
 import Ticket from './Ticket';
 import DateContext from '../../../contexts/DateContext';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
@@ -16,7 +16,9 @@ import Order from '../../models/Order';
 import updateHallMap from '../../js/updateHallMap';
 import '../../css/client.css';
 
-
+// Главная для страницы билета
+// Принимает функции для работы с сервером
+// Также принимает загрузочное окно
 const TicketPage = (props) => {
   const {
     add,
@@ -31,6 +33,8 @@ const TicketPage = (props) => {
   const { chosen } = useContext(DateContext);
 
   useEffect(() => {
+    // Если переход со страницы оплаты,то
+    // Добавляем заказ
     if (state && state.fromDisplayPayment) {
       const { data, newOrder, hallMap } = state;
       addOrder(data, newOrder, hallMap);
@@ -40,7 +44,11 @@ const TicketPage = (props) => {
   const updateHall = (id, map) => {
     update({
       url: `${process.env.REACT_APP_INDEX_URL}/${id}`,
-      body: assembleBodyForRequest('updateHall', 'shows', JSON.stringify(updateHallMap(map))),
+      body: {
+        action: 'updateHall',
+        table: 'shows',
+        data: JSON.stringify(updateHallMap(map)),
+      },
     });
   };
 
@@ -52,12 +60,17 @@ const TicketPage = (props) => {
       time: data.time.time,
       orderId: order.id,
       tickets: JSON.stringify(order.tickets),
+      email: state.email,
     };
 
     setIsLoading(true);
     add({
       url: process.env.REACT_APP_INDEX_URL,
-      body: assembleBodyForRequest('addOrder', 'orders', JSON.stringify(dataToSend)),
+      body: {
+        action: 'addOrder',
+        table: 'orders',
+        data: JSON.stringify(dataToSend),
+      },
       callback(src) {
         updateHall(data.time.showId, hallMap);
         setQr(src);
@@ -67,30 +80,28 @@ const TicketPage = (props) => {
     });
   };
 
-  const assembleBodyForRequest = (action, table, data) => ({
-    action,
-    table,
-    data,
-  });
-
   return (
     <>
       {
+        // Если со страницы оплаты заказа то показываем разметку,
+        // в противном случае возвращаем на главную?
         state && state.fromDisplayPayment ? (
           <ClientUI>
-            <ClientHeader />
-            <ClientMain>
+            <Header />
+            <Main>
               {isLoading
                 ? <LoadingScreen />
-                : <Ticket data={state.data} seats={state.seats} qr={qr} />}
-            </ClientMain>
+                : <Ticket data={state.data} tickets={state.tickets} qr={qr} />}
+            </Main>
           </ClientUI>
-        ) : <Redirect />
+        ) : <Redirect to="/" />
       }
     </>
   );
 };
 
+// Куча проверок пропсов
+// Нужно ли?
 TicketPage.propTypes = {
   location: PropTypes.shape({
     state: PropTypes.shape({
@@ -103,7 +114,7 @@ TicketPage.propTypes = {
           time: PropTypes.string.isRequired,
         }).isRequired,
       }).isRequired,
-      seats: PropTypes.arrayOf(PropTypes.object).isRequired,
+      tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
       newOrder: PropTypes.instanceOf(Order).isRequired,
       hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
     }).isRequired,
@@ -114,4 +125,7 @@ TicketPage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
 };
 
+// Оборачиваем в два HOC
+// Один дает функции для работы с сервером
+// Другой загрузочный экран
 export default withCrud(withLoadingScreen(TicketPage));

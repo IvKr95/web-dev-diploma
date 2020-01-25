@@ -4,6 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Hall from './Hall';
 
+// Показывает доступные залы
+// А также кнопку для создания нового зала
 function HallList(props) {
   const {
     halls,

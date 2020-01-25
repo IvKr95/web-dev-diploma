@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+
+// Класс для создания экземляра билета
 class Ticket {
   constructor(row, seat, type, price) {
     this.row = row;

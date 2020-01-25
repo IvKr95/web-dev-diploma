@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 const HEADER_OPEN = 'conf-step__header conf-step__header_opened';
 const HEADER_CLOSED = 'conf-step__header conf-step__header_closed';
 
+// Показывает хэдер модуля
 function ModuleHeader(props) {
   const {
     header,
@@ -14,6 +15,7 @@ function ModuleHeader(props) {
 
   return (
     <header
+      // В зависимости открыт он или нет добавляем соответствующий класс
       className={
         header.isOpen ? HEADER_OPEN : HEADER_CLOSED
       }

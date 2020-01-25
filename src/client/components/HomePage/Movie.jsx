@@ -9,15 +9,26 @@ import withCrud from '../../../hoc/WithCrud';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
 
+// Для каждого фильма свой
+// Совершает запросы чтобы получить информацию о фильме
+// Есть загрузочный экран
 const Movie = (props) => {
   const {
-    show, get, isLoading, setIsLoading,
+    show,
+    get,
+    isLoading,
+    setIsLoading,
   } = props;
   const [movie, setMovie] = useState({});
-  const [seanses, setSeanses] = useState([]);
+  const [seances, setSeances] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
+    getMovie();
+    setNewSeanses();
+  }, []);
+
+  const getMovie = () => {
     get({
       url: process.env.REACT_APP_INDEX_URL,
       body: {
@@ -31,12 +42,11 @@ const Movie = (props) => {
         setIsLoading(false);
       },
     });
-    setNewSeanses();
-  }, []);
+  };
 
   const setNewSeanses = () => {
-    const newSeanses = Object.entries(show.shows);
-    setSeanses(newSeanses);
+    const newSeances = Object.entries(show.shows);
+    setSeances(newSeances);
   };
 
   return (
@@ -45,7 +55,7 @@ const Movie = (props) => {
         {isLoading && <LoadingScreen />}
         <MovieInfo movie={movie} />
         <MovieSeances
-          seanses={seanses}
+          seances={seances}
           movieName={movie.name}
           movieId={movie.movieId}
         />
@@ -64,4 +74,7 @@ Movie.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
 };
 
+// Оборачиваем в два HOC
+// Один дает функции для работы с сервером
+// Другой загрузочный экран
 export default withCrud(withLoadingScreen(Movie));

@@ -2,33 +2,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import handleDragStart from '../../js/handleDragStart';
-import handleDragEnd from '../../js/handleDragEnd';
+import ModuleMovie from './ModuleMovie';
 
+// Отображает все фильмы
 function ModuleMovies({ movies }) {
   return (
     <div className="conf-step__movies">
-      {movies.map(
-        (movie) => {
-          const {
-            movieId, poster, name, duration,
-          } = movie;
-
-          return (
-            <div
-              className="conf-step__movie"
-              key={movieId}
-              draggable
-              onDragStart={handleDragStart}
-              onDragEnd={handleDragEnd}
-            >
-              <img className="conf-step__movie-poster" alt="poster" src={poster} draggable="false" />
-              <h3 className="conf-step__movie-title">{name}</h3>
-              <p className="conf-step__movie-duration">{duration}</p>
-            </div>
-          );
-        },
-      )}
+      {movies.map((movie) => <ModuleMovie key={movie.movieId} movie={movie} />)}
     </div>
   );
 }

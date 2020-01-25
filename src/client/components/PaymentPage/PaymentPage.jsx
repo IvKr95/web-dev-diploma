@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+// Импорт nanoid для создания уникальных id
 import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
@@ -12,20 +13,23 @@ import Payment from './Payment';
 import Order from '../../models/Order';
 import '../../css/client.css';
 
+// Главная для оплаты билета
+// Здесь формируется заказ
+// И подсчитывается цена заказа
 const PaymentPage = ({ location }) => {
   const { params, state } = location;
-  const { tickets, data, hallMap } = params;
+  const {
+    tickets, data, hallMap, email,
+  } = params;
 
   const [order, setOrder] = useState({});
   const [totalPrice, setTotalPrice] = useState(null);
-  const [seats, setSeats] = useState([]);
 
   useEffect(() => {
     if (state && state.fromHallPage) {
       if (tickets.length !== 0) {
         createNewOrder();
         calcTotalPrice();
-        incrementSeatNumber();
       }
     }
   }, []);
@@ -43,13 +47,6 @@ const PaymentPage = ({ location }) => {
     setTotalPrice(newTotalPrice);
   };
 
-  const incrementSeatNumber = () => {
-    const newSeats = tickets.map((ticket) => (
-      { row: ticket.row + 1, seat: ticket.seat + 1 }
-    ));
-    setSeats(newSeats);
-  };
-
   return (
     <>
       {
@@ -63,7 +60,8 @@ const PaymentPage = ({ location }) => {
                 hallMap={hallMap}
                 newOrder={order}
                 totalPrice={totalPrice}
-                seats={seats}
+                tickets={tickets}
+                email={email}
               />
             </Main>
           </ClientUI>
@@ -73,6 +71,7 @@ const PaymentPage = ({ location }) => {
   );
 };
 
+// Опять куча проверок
 PaymentPage.propTypes = {
   location: PropTypes.shape({
     params: PropTypes.shape({

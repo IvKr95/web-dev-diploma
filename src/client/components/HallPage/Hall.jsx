@@ -6,6 +6,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Обертка для зала, где выбирать места
 function Hall({ children }) {
   return <section className="buying">{children}</section>;
 }

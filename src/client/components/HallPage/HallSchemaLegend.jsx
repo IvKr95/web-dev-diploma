@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Легенда разметки зала
+// Принимает объект зала
+// Использует от туда цены для стандартных
+// и вип кресел
 function HallSchemaLegend({ hall }) {
   const { standardPrice, vipPrice } = hall;
 

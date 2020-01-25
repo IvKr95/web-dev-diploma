@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Здесь происходит переключение между залами
 function HallSwitcher(props) {
   const {
     halls,
@@ -11,6 +12,7 @@ function HallSwitcher(props) {
     setActiveHallMap,
   } = props;
 
+  // Устанавливает выбранный зал и его разметку в состояния
   const handleChange = (hall = '') => {
     setActiveHall(hall);
     setActiveHallMap(hall.hallSchema ? JSON.parse(hall.hallSchema) : []);

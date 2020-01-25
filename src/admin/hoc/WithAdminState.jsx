@@ -1,17 +1,23 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-use-before-define */
+/* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../css/admin.css';
 
+// Здесь лежит все состояния рута admin
+// Стоит ли так вообще делать?
+// Но пока лежит
 const withAdminState = (Component) => {
   const WithAdminState = (props) => {
     const [halls, setHalls] = useState([]);
     const [movies, setMovies] = useState([]);
     const [shows, setShows] = useState([]);
-    const [activeHall, setActiveHall] = useState('');
+    const [activeHall, setActiveHall] = useState({});
     const [activeHallMap, setActiveHallMap] = useState([]);
+    const [dragging, setDragging] = useState('');
+    const [droppedIn, setDroppedIn] = useState('');
 
     const [headers, setHeaders] = useState([
       {
@@ -44,6 +50,7 @@ const withAdminState = (Component) => {
     const [itemToDelete, setItemToDelete] = useState('');
 
     return (
+      // Здесь пробрасываю кучу пропсов
       <Component
         isModalActive={isModalActive}
         action={action}
@@ -61,6 +68,10 @@ const withAdminState = (Component) => {
         setActiveHall={setActiveHall}
         setActiveHallMap={setActiveHallMap}
         activeHallMap={activeHallMap}
+        dragging={dragging}
+        droppedIn={droppedIn}
+        setDragging={setDragging}
+        setDroppedIn={setDroppedIn}
         movies={movies}
         shows={shows}
         {...props}
@@ -79,6 +90,7 @@ const withAdminState = (Component) => {
   return WithAdminState;
 };
 
+// Как отображается имя в React DevTools
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }

@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-use-before-define */
+
 import React, { useEffect, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -15,7 +17,10 @@ import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import DateContext from '../../../contexts/DateContext';
 import '../../css/client.css';
 
-
+// Главная страница приложения
+// Принимает загрузочные экран
+// Контекст даты
+// Содержит массив сеансов
 const HomePage = (props) => {
   const { list, isLoading, setIsLoading } = props;
   const [shows, setShows] = useState([]);
@@ -23,6 +28,10 @@ const HomePage = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
+    getShows();
+  }, [chosen]);
+
+  const getShows = () => {
     list({
       url: process.env.REACT_APP_INDEX_URL,
       params: {
@@ -35,7 +44,7 @@ const HomePage = (props) => {
         setIsLoading(false);
       },
     });
-  }, [chosen]);
+  };
 
   return (
     <ClientUI>
@@ -45,9 +54,11 @@ const HomePage = (props) => {
         <LoadingScreen />
       ) : (
         <Main>
-          <MovieList>
-            {shows.map((show) => <Movie key={`${chosen}_${show.movieName}`} show={show} />)}
-          </MovieList>
+          {shows.length > 0 && (
+            <MovieList>
+              {shows.map((show) => <Movie key={`${chosen}_${show.movieName}`} show={show} />)}
+            </MovieList>
+          )}
         </Main>
       )}
     </ClientUI>
@@ -60,4 +71,7 @@ HomePage.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
 };
 
+// Оборачиваем в два HOC
+// Один дает функции для работы с сервером
+// Другой загрузочный экран
 export default withCrud(withLoadingScreen(HomePage));

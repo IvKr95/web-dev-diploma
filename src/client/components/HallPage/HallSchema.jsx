@@ -1,4 +1,6 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-use-before-define */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Ticket from '../../models/Ticket';
@@ -8,11 +10,18 @@ import HallMapSeat from './HallMapSeat';
 const DISABLED_SEAT = 'disabled';
 const STANDARD_SEAT = 'standard';
 
+// Показывает разметку зала
 function HallSchema(props) {
   const {
-    hallMap, setHallMap, hall, children, setTickets,
+    hallMap,
+    setHallMap,
+    hall,
+    children,
+    setTickets,
   } = props;
 
+  // Обрабатывает клик на кресло
+  // Создает билет
   const handleClick = (row, seat, seatInfo) => {
     if (seatInfo.type !== DISABLED_SEAT) {
       const price = determinePrice(seatInfo.type);
@@ -23,13 +32,15 @@ function HallSchema(props) {
     }
   };
 
+  // Определяет цену
   const determinePrice = (seatType) => (
     seatType === STANDARD_SEAT ? hall.standardPrice : hall.vipPrice
   );
 
+  // Выбирает кресло
   const selectSeat = (row, seat) => {
     setHallMap((prevMap) => {
-      const seatObj = prevMap[row][seat];
+      const seatObj = prevMap[row - 1][seat - 1];
       seatObj.isSelected = !seatObj.isSelected;
 
       return [...prevMap];
@@ -61,9 +72,13 @@ function HallSchema(props) {
       <div className="buying-scheme__wrapper">
         {hallMap.map((row, r) => (
           <HallMapRow key={`row_${r}`}>
-            {row.map((seat, s) => (
-              <HallMapSeat key={`seat_${s}`} onClick={handleClick} seat={seat} r={r} s={s} />
-            ))}
+            {row.map((seat, s) => {
+              const nRow = r + 1;
+              const nSeat = s + 1;
+              return (
+                <HallMapSeat key={`seat_${s}`} onClick={handleClick} seat={seat} nRow={nRow} nSeat={nSeat} />
+              );
+            })}
           </HallMapRow>
         ))}
       </div>
@@ -79,7 +94,10 @@ HallSchema.propTypes = {
     ),
   ).isRequired,
   setHallMap: PropTypes.func.isRequired,
-  hall: PropTypes.object.isRequired,
+  hall: PropTypes.shape({
+    standardPrice: PropTypes.number,
+    vipPrice: PropTypes.number,
+  }).isRequired,
   children: PropTypes.element.isRequired,
   setTickets: PropTypes.func.isRequired,
 };

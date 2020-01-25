@@ -17,6 +17,7 @@ const SEAT_TYPES = [
   },
 ];
 
+// Показывает доступные типы кресел
 function ModuleLegend() {
   return (
     <>

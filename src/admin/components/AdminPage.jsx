@@ -7,30 +7,35 @@ import PropTypes from 'prop-types';
 import AdminHeader from '../../shared-components/Header';
 import AdminNav from '../../shared-components/Nav';
 import AdminMain from '../../shared-components/Main';
+import LoadingScreen from '../../shared-components/LoadingScreen';
 import AdminModule from './Module/AdminModule';
 import ModuleHeader from './Module/ModuleHeader';
 import ModuleBody from './Module/ModuleBody';
 import ModuleMovies from './Module/ModuleMovies';
 import ModuleSeances from './Module/ModuleSeances';
-import SetHallMap from './Halls/SetHallMap';
+import SetHallMap from './Halls/HallMap';
 
-import Modal from './Modal/Modal';
-import ModalHeader from './Modal/ModalHeader';
-import ModalBody from './Modal/ModalBody';
+import Modal from '../../shared-components/Modal/Modal';
+import ModalHeader from '../../shared-components/Modal/ModalHeader';
+import ModalBody from '../../shared-components/Modal/ModalBody';
 
 import HallList from './Halls/HallList';
 import HallsSwitcher from './Halls/HallSwitcher';
 
 import OpenSales from './Sales/OpenSales';
-import UpdatePricesForm from './Forms/UpdatePrices';
+import UpdatePricesForm from '../../forms/UpdatePrices';
 
 import withCrud from '../../hoc/WithCrud';
 import withAdminLogic from '../hoc/WithAdminLogic';
 import withAdminState from '../hoc/WithAdminState';
-import '../css/admin.css';
 import withLoadingScreen from '../../hoc/WithLoadingScreen';
+import DragContext from '../../contexts/DragContext';
+
+import '../css/admin.css';
 
 const AdminPage = (props) => {
+  // Опять невероятное количество пропсов
+  // Которые глаз не радуют
   const {
     onClose: handleModal,
     onAddShow: addShow,
@@ -53,8 +58,13 @@ const AdminPage = (props) => {
     isModalActive,
     activeHallMap,
     isLoading,
+    dragging,
+    setDragging,
+    droppedIn,
+    setDroppedIn,
   } = props;
 
+  // Слот для модального окна
   const ModalSlot = (
     <Modal isModalActive={isModalActive}>
       <ModalHeader action={action} onClose={handleModal} />
@@ -68,10 +78,12 @@ const AdminPage = (props) => {
         itemToDelete={itemToDelete}
         onDelete={handleDelete}
         halls={halls}
+        shows={shows}
       />
     </Modal>
   );
 
+  // Слот который отображается, если есть залы
   const HasHallsSlot = (
     <>
       <AdminModule>
@@ -160,6 +172,12 @@ const AdminPage = (props) => {
           onClick={handleHeader}
         />
         <ModuleBody isCentered>
+          <HallsSwitcher
+            halls={halls}
+            activeHall={activeHall}
+            setActiveHall={setActiveHall}
+            setActiveHallMap={setActiveHallMap}
+          />
           <OpenSales
             onOpen={openSales}
             title={activeHall.isOpen === 'false' ? 'Открыть продажу билетов' : 'Закрыть продажу билетов'}
@@ -169,6 +187,7 @@ const AdminPage = (props) => {
     </>
   );
 
+  // Слот который отображается, если нет залов
   const NoHallsSlot = (
     <AdminModule>
       <ModuleHeader
@@ -188,17 +207,18 @@ const AdminPage = (props) => {
   return (
     <>
       {isLoading ? (
-        <div className="loading">
-          <div className="loader" />
-        </div>
+        <LoadingScreen />
       ) : (
-        <>
+        <DragContext.Provider value={{
+          dragging, setDragging, droppedIn, setDroppedIn,
+        }}
+        >
           {ModalSlot}
           <AdminHeader isAdminPage />
           <AdminMain isAdminPage>
             {halls.length === 0 ? NoHallsSlot : HasHallsSlot}
           </AdminMain>
-        </>
+        </DragContext.Provider>
       )}
     </>
   );
@@ -220,12 +240,16 @@ AdminPage.propTypes = {
   setActiveHallMap: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   activeHallMap: PropTypes.arrayOf(PropTypes.array.isRequired).isRequired,
-  movies: PropTypes.arrayOf.isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
   shows: PropTypes.arrayOf(PropTypes.object).isRequired,
   openSales: PropTypes.func.isRequired,
   handleHeader: PropTypes.func.isRequired,
   updatePrices: PropTypes.func.isRequired,
 };
 
-
+// Навешиваем много HOC-ов, чтобы вообще ничего понятно не было
+// withCrud дает нам возможность общаться с сервером (делать CRUD)
+// withAdminState дает все состояния
+// withLoadingScreen дает загрузочный экран
+// withAdminLogic дает логику для рута admin
 export default withCrud(withAdminState(withLoadingScreen(withAdminLogic(AdminPage))));

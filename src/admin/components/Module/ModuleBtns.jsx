@@ -3,6 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Кнопки формы
+// Неуверен, что их вообще целесообразно выносить, но пока так
 function ModuleBtns(props) {
   const {
     form,

@@ -3,30 +3,42 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React from 'react';
+// Используем библиотеку axios для асинхронных запросов
 import axios from 'axios';
 
 const USER_KEY = 'user';
 
+// Фукнция которая возвращает компонент высшего порядка
+// Сама принимает оборачиваемый компонент и url куда
+// посылаются запросы
 function withAuthorization(Component, apiUrl) {
+  // Компонет высшего порядка
+  // Дает нам функции для работы с сервером
+  // Также с Local Storage
   const WithAuthorization = (props) => {
+    // Устанавливаем текущего пользователя в Local Storage
     const setCurrent = (user) => {
       localStorage.setItem(USER_KEY, JSON.stringify(user));
     };
 
+    // Удаляем текущего пользователя из Local Storage
     const unsetCurrent = () => {
       localStorage.removeItem(USER_KEY);
     };
 
+    // Получаем пользователя из Local Storage
     const getCurrent = () => {
       if (localStorage.getItem(USER_KEY)) {
         try {
           return JSON.parse(localStorage.getItem(USER_KEY));
-        } catch (e) {
-          console.error(e);
+        } catch (exception) {
+          console.error(exception);
         }
       }
     };
 
+    // Получаем данные о пользователе с сервера
+    // Ошибка если неудачно
     const fetch = (callback) => {
       axios.get(
         apiUrl,
@@ -61,6 +73,8 @@ function withAuthorization(Component, apiUrl) {
       });
     };
 
+    // Пробуем залогинить пользователя
+    // Если не получается, выкидываем ошибку
     const login = (data, resolve, reject) => {
       axios.post(
         apiUrl,
@@ -85,6 +99,8 @@ function withAuthorization(Component, apiUrl) {
       });
     };
 
+    // Пробуем разлогинить пользователя
+    // Если не получается, выкидываем ошибку
     const logout = (callback) => {
       const currentUser = getCurrent();
       axios.post(
@@ -125,6 +141,7 @@ function withAuthorization(Component, apiUrl) {
   return WithAuthorization;
 }
 
+// Задаем отображаемое имя в DevTools
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }

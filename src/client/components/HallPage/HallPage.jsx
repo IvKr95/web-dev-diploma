@@ -16,17 +16,25 @@ import HallSchema from './HallSchema';
 import HallSchemaLegend from './HallSchemaLegend';
 import '../../css/client.css';
 
-const ACTIVE_LINK_CSS = {
+import Modal from '../../../shared-components/Modal/Modal';
+import ModalBody from '../../../shared-components/Modal/ModalBody';
+import ModalHeader from '../../../shared-components/Modal/ModalHeader';
+
+const ACTIVE_BUTTON_CSS = {
   pointerEvents: 'auto',
   backgroundColor: '#16A6AF',
 };
 
-const INACTIVE_LINK_CSS = {
+const INACTIVE_BUTTON_CSS = {
   pointerEvents: 'none',
   backgroundColor: 'grey',
 };
 
+const DEFAULT_EMAIL = '';
 
+// Главный компонент для рута hall
+// Получает загрузочное окно
+// Также функцию для получения данных с сервера
 const HallPage = (props) => {
   const {
     get,
@@ -35,20 +43,27 @@ const HallPage = (props) => {
     location,
   } = props;
   const { params, state } = location;
+  // Объект зала
   const [hall, setHall] = useState({});
+  // Массив массивов рядов с объектами кресел
   const [hallMap, setHallMap] = useState([]);
+  // Сюда подгружаются выбранные места
   const [tickets, setTickets] = useState([]);
-  const [isLinkActive, setIsLinkActive] = useState(false);
+  const [isButtonActive, setIsButtonActive] = useState(false);
+  const [isModalActive, setIsModalActive] = useState(false);
+  // Этот адресс будет потом использоваться для отправки QR кода
+  const [email, setEmail] = useState(DEFAULT_EMAIL);
 
   useEffect(() => {
     if (tickets.length > 0) {
-      setIsLinkActive(true);
+      setIsButtonActive(true);
     } else {
-      setIsLinkActive(false);
+      setIsButtonActive(false);
     }
   }, [tickets.length]);
 
   useEffect(() => {
+    // Если переходим с домашней страницы то получаем данные
     if (state && state.fromHomePage) {
       fetchHall();
       fetchShowData();
@@ -89,9 +104,53 @@ const HallPage = (props) => {
     });
   };
 
+  const handleClick = () => {
+    setIsModalActive(true);
+  };
+
+  const handleClose = () => {
+    setIsModalActive(!isModalActive);
+    // handleAction(event, item);
+  };
+
   return (
     <>
+      {/* Если модальное окно активно, то показываем его */}
+      {/* Вот тут-то я и подвис */}
+      {isModalActive && (
+        <Modal isModalActive={isModalActive}>
+          <ModalHeader action="Оформление заказа" onClose={handleClose} />
+          <ModalBody
+            email={email}
+            setEmail={setEmail}
+            action="addContacts"
+            onClose={handleClose}
+          >
+            <Link
+              className="acceptin-button"
+              style={isButtonActive ? ACTIVE_BUTTON_CSS : INACTIVE_BUTTON_CSS}
+              to={{
+                pathname: '/payment',
+                params: {
+                  email,
+                  tickets,
+                  data: params,
+                  hallMap,
+                  setHallMap,
+                },
+                state: {
+                  fromHallPage: true,
+                },
+              }}
+              role="button"
+            >
+Далее
+            </Link>
+          </ModalBody>
+        </Modal>
+      )}
       {
+        // Если переходим с домашней, то отображаем страницу
         state && state.fromHomePage
           ? (
             <ClientUI>
@@ -112,28 +171,18 @@ const HallPage = (props) => {
                   >
                     <HallSchemaLegend hall={hall} />
                   </HallSchema>
-                  <Link
+                  <button
+                    type="button"
                     className="acceptin-button"
-                    style={isLinkActive ? ACTIVE_LINK_CSS : INACTIVE_LINK_CSS}
-                    to={{
-                      pathname: '/payment',
-                      params: {
-                        tickets,
-                        data: params,
-                        hallMap,
-                        setHallMap,
-                      },
-                      state: {
-                        fromHallPage: true,
-                      },
-                    }}
-                    role="button"
+                    style={isButtonActive ? ACTIVE_BUTTON_CSS : INACTIVE_BUTTON_CSS}
+                    onClick={handleClick}
                   >
 Забронировать
-                  </Link>
+                  </button>
                 </Hall>
               </Main>
             </ClientUI>
+            // Если нет, то переводим обратно на главную
           ) : <Redirect to="/" />
       }
     </>

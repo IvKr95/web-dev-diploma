@@ -2,12 +2,16 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-props-no-spreading */
 
-
 import React from 'react';
 import axios from 'axios';
 
+// Фукнция которая возвращает компонент высшего порядка
+// Сама принимает оборачиваемый компонент
 const withCrud = (Component) => {
+  // Компонет высшего порядка
+  // Дает нам функции (CRUD) для работы с сервером
   const WithCrud = (props) => {
+    // Получаем данные (одно вхождение ? правильно так писать вообще?)
     const get = (data) => {
       axios.get(data.url, {
         params: data.body,
@@ -17,10 +21,8 @@ const withCrud = (Component) => {
             if (data.parsify) {
               const map = JSON.parse(response.data.hallMap);
               data.callback(map);
-              // setter(map);
             } else {
               data.callback(response.data);
-              // setter(response.data);
             }
           }
         })
@@ -35,6 +37,7 @@ const withCrud = (Component) => {
         });
     };
 
+    // Получаем список (несколько вхождений)
     const list = ({ url, params, callback }) => {
       axios.get(
         url,
@@ -60,6 +63,7 @@ const withCrud = (Component) => {
         });
     };
 
+    // Добавляем данные
     const add = ({
       url, body, responseType, callback,
     }) => {
@@ -95,6 +99,7 @@ const withCrud = (Component) => {
         });
     };
 
+    // Обновляем
     const update = ({ url, body, callback }) => {
       axios.put(
         url,
@@ -118,6 +123,7 @@ const withCrud = (Component) => {
         });
     };
 
+    // Удаляем
     const remove = ({ url, params, callback }) => {
       axios.delete(
         url,
@@ -159,6 +165,7 @@ const withCrud = (Component) => {
   return WithCrud;
 };
 
+// Задаем отображаемое имя в DevTools
 function getDisplayName(Component) {
   return Component.displayName || Component.name || 'Component';
 }

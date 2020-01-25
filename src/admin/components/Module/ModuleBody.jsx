@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 const CENTERED = 'conf-step__wrapper text-center';
 const NOT_CENTERED = 'conf-step__wrapper';
 
+// Обертка для тела модуля
+// Также решаем должен ли текст разполагаться по центру
 function ModuleBody(props) {
   const {
     children,
@@ -20,7 +22,7 @@ function ModuleBody(props) {
 }
 
 ModuleBody.propTypes = {
-  children: PropTypes.objectOf(PropTypes.any).isRequired,
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   isCentered: PropTypes.bool,
 };
 

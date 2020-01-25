@@ -5,15 +5,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Order from '../../models/Order';
-import Seats from './Seats';
+import Seats from '../../../shared-components/Seats';
 
+// Показывает что было выбранно
+// Какие места, фильм и тд
+// При клике на получить код бронирования
+// Переводит на рут билета
 const Payment = (props) => {
   const {
     data,
     hallMap,
     newOrder,
     totalPrice,
-    seats,
+    tickets,
+    email,
   } = props;
   const { movieName, hall, time } = data;
 
@@ -33,7 +38,7 @@ const Payment = (props) => {
         <p className="ticket__info">
 Места:
           {' '}
-          {seats.map((s) => <Seats key={`${s.row}_${s.seat}`} row={s.row} seat={s.seat} />)}
+          {tickets.map((t) => <Seats key={`${t.row}_${t.seat}`} row={t.row} seat={t.seat} />)}
         </p>
         <p className="ticket__info">
 В зале:
@@ -61,7 +66,8 @@ const Payment = (props) => {
               newOrder,
               data,
               hallMap,
-              seats,
+              tickets,
+              email,
             },
           }}
           role="button"
@@ -90,7 +96,7 @@ Payment.propTypes = {
   newOrder: PropTypes.instanceOf(Order).isRequired,
   hallMap: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
   totalPrice: PropTypes.number,
-  seats: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 Payment.defaultProps = {

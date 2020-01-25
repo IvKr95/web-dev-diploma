@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Содержит описание фильма
 function MovieInfo({ movie }) {
   const {
     poster, name, synopsis, duration, origin,

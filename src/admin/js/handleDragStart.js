@@ -1,9 +1,10 @@
 /* eslint-disable linebreak-style */
-const handleDragStart = (e) => {
-  const el = e.target;
-  el.classList.add('hold');
 
-  setTimeout(() => el.classList.add('invisible'), 0);
+const handleDragStart = (event) => {
+  const element = event.target;
+  element.classList.add('hold');
+
+  setTimeout(() => element.classList.add('invisible'), 0);
 };
 
 export default handleDragStart;

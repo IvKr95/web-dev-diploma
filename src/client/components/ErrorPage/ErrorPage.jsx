@@ -2,6 +2,8 @@
 import React from 'react';
 import './errorPage.css';
 
+// Показывается когда пользователь переходит
+// по несуществующему руту
 function ErrorPage() {
   return (
     <div className="error">

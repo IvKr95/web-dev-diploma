@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 import LoginContext from '../contexts/LoginContext';
 import withAuthorization from '../hoc/WithAuthorization';
 
+// Значение формы по умолчанию
 const DEFAULT_LOGIN_STATE = {
   email: '',
   password: '',
 };
 
+// Стили для ошибок логина
 const css = {
   error: {
     fontSize: '2rem',
@@ -24,11 +26,13 @@ const css = {
 
 const LoginForm = ({ login }) => {
   const [state, setState] = useState(DEFAULT_LOGIN_STATE);
+  // Если есть ошибка при авторизации, то подгружается сюда
   const [error, setError] = useState(null);
+  // Меняем контекст при успешном логине
   const { setIsLoggedIn } = useContext(LoginContext);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
     setState((prev) => ({
       ...prev,
@@ -45,10 +49,6 @@ const LoginForm = ({ login }) => {
     };
 
     login(authData, setIsLoggedIn, setError);
-    refreshForm();
-  };
-
-  const refreshForm = () => {
     setState(DEFAULT_LOGIN_STATE);
   };
 
@@ -67,11 +67,12 @@ const LoginForm = ({ login }) => {
 
           <label
             className="login__label"
-            htmlFor="mail"
+            htmlFor="email"
             style={error === 'No Such User' || error === 'Empty Fields, Fill In All Fields!' ? { color: 'red' } : null}
           >
 E-mail
             <input
+              id="email"
               className="login__input"
               type="mail"
               placeholder="example@domain.xyz"
@@ -84,11 +85,12 @@ E-mail
 
           <label
             className="login__label"
-            htmlFor="pwd"
+            htmlFor="password"
             style={error === 'Wrong Password' || error === 'Empty Fields, Fill In All Fields!' ? { color: 'red' } : null}
           >
             Пароль
             <input
+              id="password"
               className="login__input"
               type="password"
               name="password"
@@ -109,8 +111,9 @@ E-mail
 };
 
 LoginForm.propTypes = {
+  // Функция логина из HOC withAuthorization
   login: PropTypes.func.isRequired,
 };
 
-
+// Используем HOC для работы с сервером
 export default withAuthorization(LoginForm, process.env.REACT_APP_AUTH_URL);

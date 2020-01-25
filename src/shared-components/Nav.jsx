@@ -7,6 +7,7 @@ import DateContext from '../contexts/DateContext';
 import NavTab from './NavTab';
 import 'moment/locale/ru';
 
+// Навигация по датам
 const Nav = () => {
   const [days, setDays] = useState([
     moment(),
@@ -16,13 +17,20 @@ const Nav = () => {
     moment().add(4, 'd'),
     moment().add(5, 'd'),
   ]);
+  // Используем контекст даты
+  // Точнее функцию для выбора текущей даты
   const { setChosen } = useContext(DateContext);
 
-  const handleChoose = (e) => {
-    const newChosen = e.currentTarget.dataset.date;
+  // Переключатель дат
+  const handleChoose = (event) => {
+    const newChosen = event.currentTarget.dataset.date;
     setChosen(newChosen);
   };
 
+  // При нажатии на кнопку 'назад'
+  // показывается предыдущая дата
+  // Но не будет работать если крайний левый блок
+  // является сегодняшней датой
   const setPrevDay = () => {
     if (days[0].format('L') !== moment().format('L')) {
       setDays((prevDays) => {
@@ -33,6 +41,9 @@ const Nav = () => {
     }
   };
 
+  // При нажатий на кнопку 'вперед'
+  // показывается следующая дат
+  // Лимита нет (Может стоит сделать?)
   const setNextDay = () => {
     setDays((prevDays) => {
       prevDays.shift();

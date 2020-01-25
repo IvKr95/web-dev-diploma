@@ -7,7 +7,8 @@ import handleDragLeave from '../../js/handleDragLeave';
 import handleDragOver from '../../js/handleDragOver';
 import ModuleShow from './ModuleShow';
 
-
+// Показывает зал с таймлайном
+// И всеми шоу в этом таймлайне
 function ModuleHall(props) {
   const {
     hall,
@@ -26,10 +27,17 @@ function ModuleHall(props) {
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        onDrop={(event) => handleDrop(event, hallName)}
       >
         {
-          shows.map((show) => <ModuleShow key={show.showId} show={show} hallName={hallName} onClick={handleModal} />)
+          shows.map((show) => (
+            <ModuleShow
+              key={show.showId}
+              show={show}
+              hallName={hallName}
+              onClick={handleModal}
+            />
+          ))
         }
       </div>
     </div>

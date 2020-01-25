@@ -2,9 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Seats from '../../../shared-components/Seats';
 
+// Просто отображает билет
 function Ticket(props) {
-  const { data, seats, qr } = props;
+  const { data, tickets, qr } = props;
   const { movieName, hall, time } = data;
 
   return (
@@ -23,16 +25,7 @@ function Ticket(props) {
         <p className="ticket__info">
 Места:
           {' '}
-          {seats.map((s) => (
-            <>
-Ряд:
-              {' '}
-              <span className="ticket__details ticket__chairs">{s.row}</span>
-Место:
-              {' '}
-              <span className="ticket__details ticket__chairs">{s.seat}</span>
-            </>
-          ))}
+          {tickets.map((t) => <Seats key={`${t.row}_${t.seat}`} row={t.row} seat={t.seat} />)}
         </p>
         <p className="ticket__info">
 В зале:
@@ -62,7 +55,7 @@ Ticket.propTypes = {
       time: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  seats: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
   qr: PropTypes.string.isRequired,
 };
 

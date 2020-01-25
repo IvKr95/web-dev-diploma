@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable linebreak-style */
 
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Показывает зал и кнопку для его удаления
 function Hall(props) {
   const {
     hallName,
@@ -16,7 +18,7 @@ function Hall(props) {
         type="button"
         className="conf-step__button conf-step__button-trash"
         data-action="deleteHall"
-        onClick={(e) => handleModal(e, hallName)}
+        onClick={(event) => handleModal(event, hallName)}
       />
     </li>
   );

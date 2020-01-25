@@ -3,6 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../css/client.css';
 
+// Компонент обертка
+// Принимает массив элементов
 function ClientUI({ children }) {
   return (
     <div className="client-ui">

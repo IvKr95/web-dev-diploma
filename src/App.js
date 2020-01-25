@@ -21,10 +21,16 @@ import LoginContext from './contexts/LoginContext';
 import withAuthorization from './hoc/WithAuthorization';
 import './App.css';
 
+// Главный компонент приложения
+// Содержит два состояния, логин и дату, которые с помощью
+// Context API передает во все нижележащие компоненты
+// Содержит рутер и руты
+
 const App = ({ fetch }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [chosen, setChosen] = useState(moment().format('L'));
 
+  // получение информации о пользователе
   useEffect(() => {
     fetch(setIsLoggedIn);
   }, []);
@@ -61,7 +67,10 @@ const App = ({ fetch }) => {
 };
 
 App.propTypes = {
+  // функция для получение информации о пользователе
   fetch: PropTypes.func.isRequired,
 };
 
+// используем компонент высшего порядка
+// дает функции для работы с авторизацией
 export default withAuthorization(App, process.env.REACT_APP_AUTH_URL);

@@ -2,6 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Семантически оборачивает содержимое
+// Если в администраторской, то задаем класс
+// 'conf-steps'
 function Main({ children, isAdminPage }) {
   return (
     <main className={isAdminPage ? 'conf-steps' : ''}>
@@ -11,7 +14,8 @@ function Main({ children, isAdminPage }) {
 }
 
 Main.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.bool]).isRequired,
+  // Проверяем, не в админе ли мы
   isAdminPage: PropTypes.bool,
 };
 

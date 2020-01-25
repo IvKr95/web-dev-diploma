@@ -1,9 +1,11 @@
 /* eslint-disable linebreak-style */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import ModuleHall from './ModuleHall';
+import DragContext from '../../../contexts/DragContext';
 
+// Отображает сеансы
 function ModuleSeances(props) {
   const {
     halls,
@@ -11,9 +13,14 @@ function ModuleSeances(props) {
     onClick: handleModal,
   } = props;
 
-  const handleDrop = (e) => {
-    e.target.classList.remove('hold');
-    handleModal(e);
+  // Используем контекст drag&drop
+  // Устанавливаем элемент в который дропаем
+  const { setDroppedIn } = useContext(DragContext);
+
+  const handleDrop = (event, element) => {
+    setDroppedIn(element);
+    event.target.classList.remove('hold');
+    handleModal(event, element);
   };
 
   return (
@@ -21,7 +28,13 @@ function ModuleSeances(props) {
       {
         halls.map(
           (hall) => (
-            <ModuleHall key={hall.hallName} hall={hall} shows={shows} onDrop={handleDrop} onClick={handleModal} />
+            <ModuleHall
+              key={hall.hallName}
+              hall={hall}
+              shows={shows}
+              onDrop={handleDrop}
+              onClick={handleModal}
+            />
           ),
         )
       }

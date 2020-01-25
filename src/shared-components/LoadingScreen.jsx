@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Загрузочный экран
 function LoadingScreen() {
   return (
     <div className="loading-screen">

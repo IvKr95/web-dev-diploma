@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Здесь открываем или закрываем зал для продаж
 function OpenSales(props) {
   const {
     onOpen: openSales,

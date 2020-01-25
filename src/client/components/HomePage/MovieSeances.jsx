@@ -5,20 +5,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+// Отображает сеансы
+// Переводит на конкретный сеанс при клике по нему
 const MovieSeances = (props) => {
   const {
-    seanses,
+    seances,
     movieName,
     movieId,
   } = props;
 
   return (
     <>
-      {seanses.map((show) => (
-        <div key={show[0]} className="movie-seances__hall">
-          <h3 className="movie-seances__hall-title">{show[0]}</h3>
+      {seances.map((seance) => (
+        <div key={seance[0]} className="movie-seances__hall">
+          <h3 className="movie-seances__hall-title">{seance[0]}</h3>
           <ul className="movie-seances__list">
-            {show[1].map((t) => (
+            {seance[1].map((t) => (
               <li key={t.showId} className="movie-seances__time-block">
                 <Link
                   className="movie-seances__time"
@@ -27,7 +29,7 @@ const MovieSeances = (props) => {
                     params: {
                       movieName,
                       movieId,
-                      hall: show[0],
+                      hall: seance[0],
                       time: t,
                     },
                     state: {
@@ -47,7 +49,7 @@ const MovieSeances = (props) => {
 };
 
 MovieSeances.propTypes = {
-  seanses: PropTypes.arrayOf(
+  seances: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   ).isRequired,
   movieName: PropTypes.string,
