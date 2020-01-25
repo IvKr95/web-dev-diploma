@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * The main file where all requests are processed
+ */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -23,9 +27,9 @@ if ($method === 'GET') {
         
 } elseif ($method === 'POST') {
 
-    $action = $payload->action;
-    $table = $payload->table;
-    $data = json_decode($payload->data);
+    $action = $_POST['action'] ?? $payload->action;
+    $table = $_POST['table'] ?? $payload->table;
+    $data = json_decode($_POST['data']) ?? json_decode($payload->data);
     $file = $_FILES['poster'] ?? null;
 
     if ($action === 'addOrder') {
@@ -39,50 +43,46 @@ if ($method === 'GET') {
         $mail = new PHPMailer(true);
     
         $id = $data->orderId;
-        $fileLocation = "../orders_qrs/qr_$id.png";
+        $to = $data->email;
+        $fileLocation = "./orders_qrs/qr_$id.png";
+        $template = file_get_contents('./mailPage.php');
+
         try {
-            //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-            $mail->isSMTP();                                            // Send using SMTP
-            $mail->CharSet = 'UTF-8';
-            $mail->Host       = 'smtp.mail.ru';                    // Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = 'idemvkino.prilozheniye@mail.ru';                 // SMTP username
-            $mail->Password   = 'AAoPT2osra4_';                               // SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-            $mail->Port       = 587;                                    // TCP port to connect to
-    
-            //Recipients
-            $mail->setFrom('idemvkino.prilozheniye@mail.ru', 'ИдемВКино'); // Name is optional
-            $mail->addAddress('cold67@mail.ru', 'Покупателю Билета В Кино');     // Add a recipient
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Ваш билет На Сеанс!';
-    
-            $html = file_get_contents('../mailPage.php');
-            $html = str_replace('{%TIME%}', $data->time, $html);
-            $html = str_replace('{%HALL_NAME%}', $data->hall, $html);
-            $html = str_replace('{%MOVIE_NAME%}', $data->movieName, $html);
-            $tickets = json_decode($data->tickets);
-            $seats = '';
-    
-            foreach ($tickets as $key) {
-                $seats .= "Ряд: <span class=\"ticket__details ticket__chairs\" style=\"font-weight:700;\">$key->row</span>
-                Место: <span class=\"ticket__details ticket__chairs\" style=\"font-weight:700;\">$key->seat</span>";
-            }
-    
-            $html = str_replace('{%SEATS%}', $seats, $html);
-    
-            $mail->Body = $html;
-    
-            $mail->addEmbeddedImage(realpath($fileLocation), 'qr', "qr_$id.png", 'base64', 'image/png');
-            $mail->send();
+            EmailSender::send($mail, $template, $data, [
+                'debug' => SMTP::DEBUG_SERVER,
+                'charset' => 'UTF-8',
+                'host' => 'smtp.mail.ru',
+                'auth' => true,
+                'username' => 'idemvkino.prilozheniye@mail.ru',
+                'password' => 'AAoPT2osra4_',
+                'encryption' => PHPMailer::ENCRYPTION_STARTTLS,
+                'port' => 587,
+                'from' => [
+                    'address' => 'idemvkino.prilozheniye@mail.ru',
+                    'name' => 'ИдемВКино'
+                ],
+                'to' => [
+                    'address' => $to,
+                    'name' => 'Покупателю Билета В Кино'
+                ],
+                'subject' => 'Ваш билет На Сеанс!',
+                'html' => true,
+                'image' => [
+                    'fileLocation' => $fileLocation,
+                    'cid' => 'qr',
+                    'name' => "qr_$id.png",
+                    'encoding' => 'base64',
+                    'type' => 'image/png',
+                ]
+            ]);
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        } 
+        }
+        unset($mail);
     }
     
 } elseif ($method === 'PUT') {
+    
     $path = explode('/', $_SERVER['PATH_INFO']);
     $param = end($path);
 

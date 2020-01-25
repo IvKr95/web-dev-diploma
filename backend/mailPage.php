@@ -1,3 +1,9 @@
+<!-- 
+  This file contains an html template that is sent to the user's email. 
+  All markers are to be replaced with appropriate values during email
+  configuration in EmailSender class.
+-->
+
 <section class="ticket">
   <header class="tichet__check" style="padding-left:1.5rem;padding-right:1.5rem;background-color:rgba(241, 235, 230, 0.95);position:relative;padding-top:2.5rem;padding-bottom:2.5rem;">
     <h2 class="ticket__check-title" style="font-weight:700;font-size:2.2rem;text-transform:uppercase;color:#C76F00;">Электронный билет</h2>
