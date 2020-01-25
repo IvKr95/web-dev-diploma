@@ -1,17 +1,32 @@
 <?php
 
+/**
+ * Used to get various data from the given table
+ */
 class GetData extends BaseClass
 {
 
-    public function __construct(string $action, $table, object $connect, ?string $param) 
+    /**
+     * Constructor of GetData
+     * @param object $connect
+     * @param string $table
+     * @param string $action
+     * @param string|null $param
+     */
+    public function __construct(string $action, string $table, object $connect, ?string $param) 
     {
         parent::__construct($connect, $action, $table);
         $this->param = $param;
     }
 
-    public function setQuery(): void
+    /**
+     * Prepares a Query
+     * @uses $this->table
+     * @uses $this->action
+     * @return void
+     */
+    private function setQuery(): void
     {
-        
         if ($this->action === 'getHallMapByShowId') {
             $this->query = "SELECT `hallMap` FROM " . $this->table . " WHERE `showId`=?";
         } elseif ($this->action === 'getHallByName') {
@@ -27,6 +42,16 @@ class GetData extends BaseClass
         }
     }
 
+    /**
+     * Gets data
+     * @uses $this->connect()
+     * @uses $this->setQuery()
+     * @uses $this->onFail()
+     * @uses $this->onSuccess()
+     * @uses $this->stmt
+     * @uses $this->query
+     * @return void
+     */
     public function get(): void
     {
         $this->connect();
@@ -36,47 +61,105 @@ class GetData extends BaseClass
         } else {
             $this->onSuccess();
         };
-        $this->disconnect();
     }
 
-    public function onSuccess(): void
+    /**
+     * Fires on successful SQL statement execution
+     * @uses $this->bindParams()
+     * @uses $this->execute()
+     * @uses $this->setOutput()
+     * @uses $this->outputResult()
+     * @return void
+     */
+    private function onSuccess(): void
     {
         if ($this->param) {
             $this->bindParams();
         }
         $this->execute();
-        $this->getResult();
-        $this->outputRows();
+        $this->setOutput();
+        $this->outputResult();
     }
 
-    public function outputRows(): void
+    /**
+     * Binds params to a prepared statement 
+     * @uses $this->stmt
+     * @uses $this->param
+     * @return void
+     */
+    private function bindParams(): void
     {
-        if ($this->rows || count($this->rows) > 0) {
-            echo json_encode($this->rows);
-        } else {
-            echo json_encode([]);
-        }
+        mysqli_stmt_bind_param($this->stmt, substr(gettype($this->param), 0, 1), $this->param);
     }
 
-    public function getResult(): void
+    /**
+     * Gets a result set from a prepared statement
+     * @uses $this->stmt
+     * @return void
+     */
+    private function getResult(): void
     {
-        $this->result = mysqli_stmt_get_result($this->stmt);
+        $this->result = mysqli_stmt_get_result($this->stmt); 
+    }
 
-        if ($this->action === 'getShowsByDate') {
+    /**
+     * Gets a result row
+     * @uses $this->result
+     * @return void
+     */
+    private function getRows(string $fetchAs): void
+    {
+        if ($fetchAs === 'object') {
+            $this->rows = mysqli_fetch_object($this->result);
+        } elseif ($fetchAs === 'array') {
             $this->rows = [];
             while ($row = mysqli_fetch_assoc($this->result)) {
                 array_push($this->rows, $row);
-            };
+            }
+        } 
+    }
 
-            $formatedShows = [];
+    /**
+     * Check if given hall open
+     * @uses $this->stmt
+     * @return string
+     */
+    private function checkIfHallOpen($hall): string
+    {
+        $checkQuery = "SELECT * FROM `halls` WHERE `hallName`=?";
+        if (!mysqli_stmt_prepare($this->stmt, $checkQuery)) {
+            $this->onFail();
+        } else {
+            mysqli_stmt_bind_param($this->stmt, substr(gettype($hall), 0, 1), $hall);
+            mysqli_stmt_execute($this->stmt);
+            $result = mysqli_stmt_get_result($this->stmt);
+            $r = mysqli_fetch_object($result);
+            return $r->isOpen;
+        }
+    }
+
+    /**
+     * Generates an associative array 
+     * which contains subarrays filled with
+     * movie name and shows
+     * @uses $this->checkIfHallOpen()
+     * @uses $this->rows
+     * @return void
+     */
+    private function prepareShowsForResponse(): void
+    {
+        $shows = [];
         
-            foreach ($this->rows as $show) {
-                $showId = $show['showId'];
-                $time = $show['time'];
-                $movieName = $show['movieName'];
-                $hall = $show['hall'];
+        foreach ($this->rows as $show) {
+            $showId = $show['showId'];
+            $time = $show['time'];
+            $movieName = $show['movieName'];
+            $hall = $show['hall'];
 
-                if (count($formatedShows) === 0) {
+            $isOpen = $this->checkIfHallOpen($hall);
+
+            if ($isOpen === 'true') {
+                if (count($shows) === 0) {
                     $data = [
                         'movieName' => $movieName,
                         'shows' => [
@@ -88,28 +171,28 @@ class GetData extends BaseClass
                             ]
                         ]
                     ];
-                    array_push($formatedShows, $data);
+                    array_push($shows, $data);
                 } else {
                     $flag1 = false;
 
-                    foreach ($formatedShows as &$formatedShow) {
-                        if ($formatedShow['movieName'] === $movieName) {
+                    foreach ($shows as &$nShow) {
+                        if ($nShow['movieName'] === $movieName) {
                             $flag1 = false;
-                            if (array_key_exists($hall, $formatedShow['shows'])) {
+                            if (array_key_exists($hall, $nShow['shows'])) {
                                 $flag2 = false;
         
-                                foreach ($formatedShow['shows'][$hall] as $show) {
-                                    if ($show['showId'] === $showId) {
+                                foreach ($nShow['shows'][$hall] as $seance) {
+                                    if ($seance['showId'] === $showId) {
                                         break;
                                     } else {
                                         $flag2 = true;
                                     }
                                 }
         
-                                if ($flag2) array_push($formatedShow['shows'][$hall], ['showId' => $showId, 'time' => $time]);
+                                if ($flag2) array_push($nShow['shows'][$hall], ['showId' => $showId, 'time' => $time]);
         
                             } else {
-                                $formatedShow['shows'][$hall] = [
+                                $nShow['shows'][$hall] = [
                                     [
                                         'showId' => $showId, 
                                         'time' => $time
@@ -124,7 +207,7 @@ class GetData extends BaseClass
 
                     if ($flag1) {
                         $data = [
-                            'movie' => $movieName,
+                            'movieName' => $movieName,
                             'shows' => [
                                 $hall => [
                                     [
@@ -134,42 +217,87 @@ class GetData extends BaseClass
                                 ]
                             ]
                         ];
-                        array_push($formatedShows, $data);
+                        array_push($shows, $data);
                     }
                 }
             }
-
-            $this->rows = $formatedShows;
-        
-        } elseif ($this->action === 'getMovieByName') {
-            $this->rows = mysqli_fetch_object($this->result);
-
-            if (isset($this->rows->poster)) {
-                $img_base64 = base64_encode(file_get_contents($this->rows->poster));
-                $img = 'data:image/png'.';base64,'.$img_base64;
-                $this->rows->poster = $img;
-            }
-        } elseif ($this->action === 'getMovies' || $this->action === 'getHalls' || $this->action === 'getShows') {
-            $this->rows = [];
-            while ($row = mysqli_fetch_assoc($this->result)) {
-                array_push($this->rows, $row);
-            };
-            if ($this->table === 'movies') {
-                foreach ($this->rows as &$movie) {
-                    if (isset($movie['poster'])) {
-                        $img_base64 = base64_encode(file_get_contents($movie['poster']));
-                        $img = 'data:image/png'.';base64,'.$img_base64;
-                        $movie['poster'] = $img;
-                    }
-                }
-            }
-        } else {
-            $this->rows = mysqli_fetch_object($this->result);
+            $this->rows = $shows;
         }
     }
 
-    public function bindParams(): void
+    /**
+     * Replaces poster relative url
+     * with base64 encoded image
+     * @uses $this->rows
+     * @return void
+     */
+    private function prepareMovieForResponse(): void
     {
-        mysqli_stmt_bind_param($this->stmt, substr(gettype($this->param), 0, 1), $this->param);
+        if (isset($this->rows->poster)) {
+            $img_base64 = base64_encode(file_get_contents(__DIR__ . $this->rows->poster));
+            $img = 'data:image/png'.';base64,'.$img_base64;
+            $this->rows->poster = $img;
+        }
+    }
+
+    /**
+     * Replaces poster relative urls
+     * with base64 encoded images
+     * @uses $this->rows
+     * @return string
+     */
+    private function prepareMoviesForResponse()
+    {
+        if ($this->table === 'movies') {
+            foreach ($this->rows as &$movie) {
+
+                if (isset($movie['poster'])) {
+                    $img_base64 = base64_encode(file_get_contents(__DIR__ . $movie['poster']));
+                    $img = 'data:image/png'.';base64,'.$img_base64;
+                    $movie['poster'] = $img;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets output
+     * @uses $this->getResult()
+     * @uses $this->getRows()
+     * @uses $this->prepareShowsForResponse()
+     * @uses $this->prepareMovieForResponse()
+     * @uses $this->prepareMoviesForResponse()
+     * @return void
+     */
+    private function setOutput(): void
+    {
+        $this->getResult();
+
+        if ($this->action === 'getShowsByDate') {
+            $this->getRows('array');
+            $this->prepareShowsForResponse();
+        } elseif ($this->action === 'getMovieByName') {
+            $this->getRows('object');
+            $this->prepareMovieForResponse(); 
+        } elseif ($this->action === 'getMovies' || $this->action === 'getHalls' || $this->action === 'getShows') {
+            $this->getRows('array');
+            $this->prepareMoviesForResponse();
+        } else {
+            $this->getRows('object');
+        }
+    }
+
+    /**
+     * Prints result
+     * @uses $this->rows
+     * @return void
+     */
+    private function outputResult(): void
+    {
+        if ($this->rows || count($this->rows) > 0) {
+            echo json_encode($this->rows);
+        } else {
+            echo json_encode([]);
+        }
     }
 }
