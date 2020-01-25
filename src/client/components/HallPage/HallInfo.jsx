@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Отображает информацию по залу
 function HallInfo({ data }) {
   const { movieName, time, hall } = data;
 
