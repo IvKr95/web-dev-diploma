@@ -1,17 +1,25 @@
 .error {
-    width: 500px;
-    height: 300px;
-    margin: 50px auto;
-}
-
-.error__content {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    display: table;
+    width: 100%;
+    height: 100vh;
     text-align: center;
 }
 
+.error__content {
+    display: table-cell;
+	vertical-align: middle;
+}
+
 .error__text {
-    color: black;
-    font-size: 40px;
-    font-weight: 700;
+    display: inline-block;
+    padding-right: 12px;
+    animation: type .5s alternate infinite;
+    font-family: 'Lato', sans-serif;
+    color:whitesmoke;
+    font-size: 50px;
+}
+
+@keyframes type{
+	  from{box-shadow: inset -3px 0px 0px whitesmoke;}
+	  to{box-shadow: inset -3px 0px 0px transparent;}
 }
