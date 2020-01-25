@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Here all auth happens
+ * The input file for loggin,
+ * logout and current user fetching
+ */
+
 require_once '../config/http_headers.php';
 require_once '../config/database.php';
 require_once './autoload.php';
