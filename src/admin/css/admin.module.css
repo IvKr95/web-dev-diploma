@@ -1,57 +1,6 @@
 @charset "UTF-8";
-* {
-  margin: 0;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
-button {
-  border: none;
-}
-
-@-webkit-keyframes slideFromTop {
-  0% {
-    top: -50vh;
-  }
-  100% {
-    top: 100px;
-  }
-}
-
-@keyframes slideFromTop {
-  0% {
-    top: -50vh;
-  }
-  100% {
-    top: 100px;
-  }
-}
-
-@-webkit-keyframes darken {
-  0% {
-    background: 0;
-  }
-  100% {
-    background: rgba(0, 0, 0, 0.7);
-  }
-}
-
-@keyframes darken {
-  0% {
-    background: 0;
-  }
-  100% {
-    background: rgba(0, 0, 0, 0.7);
-  }
-}
-
-html {
-  font-family: "Roboto", sans-serif;
-  font-size: 62.5%;
-}
-
-body {
+body.admin-theme {
+  min-width: 350px;
   background-image: url("../i/background.jpg");
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: multiply;
@@ -68,120 +17,12 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   text-align: center;
 }
 
-.conf-steps, .page-header {
+.conf-steps {
   margin: 0 auto;
 }
 
-.conf-step__wrapper, .conf-step__header, .page-header {
+.conf-step__wrapper, .conf-step__header {
   padding: 35px 42px 35px 104px;
-}
-
-.page-header {
-  color: #FFFFFF;
-  text-transform: uppercase;
-}
-
-.page-header .page-header__title {
-  margin: 0;
-  font-weight: 900;
-  font-size: 3.4rem;
-}
-
-.page-header .page-header__title span {
-  font-weight: 100;
-}
-
-.page-header .page-header__subtitle {
-  font-size: 1rem;
-  letter-spacing: 0.46em;
-}
-
-.page-nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-  width: 100%;
-  -webkit-box-align: stretch;
-      -ms-flex-align: stretch;
-          align-items: stretch;
-  color: #000000;
-  z-index: 10;
-}
-
-.page-nav .page-nav__day {
-  -ms-flex-preferred-size: calc(100% / 8);
-      flex-basis: calc(100% / 8);
-  font-size: 1.2rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.9);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);
-          box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);
-  border-radius: 2px;
-  text-decoration: none;
-  color: #000000;
-}
-
-.page-nav .page-nav__day + .page-nav__day {
-  margin-left: 1px;
-}
-
-.page-nav .page-nav__day .page-nav__day-week::after {
-  content: ',';
-}
-
-.page-nav .page-nav__day .page-nav__day-number::before {
-  content: ' ';
-}
-
-.page-nav .page-nav__day .page-nav__day-week, .page-nav .page-nav__day .page-nav__day-number {
-  display: block;
-}
-
-.page-nav .page-nav__day_chosen {
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  background-color: #FFFFFF;
-  font-weight: 700;
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
-}
-
-.page-nav .page-nav__day_weekend {
-  color: #DE2121;
-}
-
-.page-nav .page-nav__day_prev {
-  text-align: center;
-}
-
-.page-nav .page-nav__day_prev::before {
-  content: '<';
-  font-family: monospace;
-  font-weight: 700;
-  font-size: 2.4rem;
-}
-
-.page-nav .page-nav__day_next {
-  text-align: center;
-}
-
-.page-nav .page-nav__day_next::before {
-  content: '>';
-  font-family: monospace;
-  font-weight: 700;
-  font-size: 2.4rem;
-}
-
-.page-nav .page-nav__day_today .page-nav__day-week::before {
-  content: 'Сегодня';
-  display: block;
-}
-
-.page-nav .page-nav__day_today .page-nav__day-week, .page-nav .page-nav__day_today .page-nav__day-number {
-  display: inline;
 }
 
 .conf-step {
@@ -257,6 +98,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
 }
 
 .conf-step__header .conf-step__title {
+  display: inline-block;
   font-size: 2.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -350,7 +192,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   left: -14px;
 }
 
-.conf-step__button, .login__button {
+.conf-step__button {
   -webkit-box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.24), 0px 0px 3px rgba(0, 0, 0, 0.12);
           box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.24), 0px 0px 3px rgba(0, 0, 0, 0.12);
   border-radius: 3px;
@@ -367,12 +209,12 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
           transition-timing-function: ease;
 }
 
-.conf-step__button:hover, .conf-step__button:focus, .login__button:hover, .login__button:focus {
+.conf-step__button:hover, .conf-step__button:focus {
   background-color: #EEEAF1;
   outline: none;
 }
 
-.conf-step__button:active, .login__button:active {
+.conf-step__button:active {
   position: relative;
   top: 2px;
   background-color: #63536C;
@@ -381,7 +223,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
           box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
 }
 
-.conf-step__button + .conf-step__button, .login__button + .conf-step__button, .conf-step__button + .login__button, .login__button + .login__button {
+.conf-step__button + .conf-step__button {
   margin-left: 12px;
 }
 
@@ -392,22 +234,24 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
 .conf-step__button-regular {
   color: #63536C;
   padding: 12px 32px;
-  margin-top: 17px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
-.conf-step__button.conf-step__button-accent, .login__button {
+.conf-step__button.conf-step__button-accent {
   color: #FFFFFF;
   background-color: #16A6AF;
   padding: 12px 32px;
-  margin-top: 17px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
-.conf-step__button.conf-step__button-accent:hover, .conf-step__button.conf-step__button-accent:focus, .login__button:hover, .login__button:focus {
+.conf-step__button.conf-step__button-accent:hover, .conf-step__button.conf-step__button-accent:focus {
   background-color: #2FC9D2;
   outline: none;
 }
 
-.conf-step__button.conf-step__button-accent:active, .login__button:active {
+.conf-step__button.conf-step__button-accent:active {
   position: relative;
   top: 2px;
   background-color: #146C72;
@@ -460,7 +304,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   margin-top: 10px;
 }
 
-.conf-step__label, .login__label {
+.conf-step__label {
   display: inline-block;
   font-size: 1.2rem;
   color: #848484;
@@ -479,7 +323,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   width: 100%;
 }
 
-.conf-step__input, .login__input {
+.conf-step__input {
   display: block;
   width: 100px;
   margin-top: 1px;
@@ -489,7 +333,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   border: 1px solid #b7b7b7;
 }
 
-.conf-step__input:focus, .login__input:focus {
+.conf-step__input:focus {
   outline: 1px #CF87FF solid;
   outline-offset: -1px;
 }
@@ -584,7 +428,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
 
 .conf-step__hall {
   position: relative;
-  padding: 62px 32px 34px;
+  padding: 62px 0px 34px;
   border: 2px solid #000000;
   text-align: center;
 }
@@ -629,7 +473,6 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  margin-bottom: 12px;
 }
 
 .conf-step__movies .conf-step__movie {
@@ -641,12 +484,15 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   border: 1px solid rgba(0, 0, 0, 0.3);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  cursor: -webkit-grab;
-  cursor: grab;
+  cursor: pointer;
+}
+
+.conf-step__movies .conf-step__movie.hold {
+  border: 1px solid black;
 }
 
 .conf-step__movies .conf-step__movie.invisible {
-  display: none;
+  opacity: 0;
 }
 
 .conf-step__movies .conf-step__movie:nth-of-type(3n + 2) {
@@ -731,7 +577,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   width: calc(1440px * 0.5);
 }
 
-.conf-step__seances-timeline.hold {
+.conf-step__seances-timeline.hovered {
   border: 1px solid black;
 }
 
@@ -758,16 +604,6 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   font-size: 1.2rem;
 }
 
-.conf-step__seances-movie .conf-step__seances-movie__dismiss {
-  position: absolute;
-  right: -5px;
-  top: -7px;
-  border: 1px solid black;
-  border-radius: 3px;
-  color: darkgreen;
-  background-color: black;
-}
-
 .conf-step__seances-movie::before {
   content: '';
   position: absolute;
@@ -779,112 +615,136 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   background-color: #848484;
 }
 
-.login {
-  width: 480px;
-  margin: 0 auto;
-  position: relative;
-  background-color: rgba(234, 233, 235, 0.95);
+@media screen and (max-width: 400px) {
+  .conf-step__legend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
 }
 
-.login__wrapper {
-  padding: 35px 104px;
+@media screen and (max-width: 400px) {
+  .conf-step__legend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .conf-step__hall {
+    padding-top: 60px;
+    padding-bottom: 30px;
+  }
+  .conf-step__hall .conf-step__hall-wrapper .conf-step__row + .conf-step__row {
+    margin-top: 5px;
+  }
+  .conf-step__hall .conf-step__chair + .conf-step__chair {
+    margin-left: 5px;
+  }
 }
 
-.login__header {
-  position: relative;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 16px 104px;
-  background-color: #63536C;
-  color: #FFFFFF;
+@media screen and (max-width: 410px) {
+  .conf-step__button + .conf-step__button {
+    margin-left: 0;
+  }
 }
 
-.login__title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  text-align: center;
+@media screen and (min-width: 440px) {
+  .conf-step__header {
+    padding-left: 100px;
+  }
+  .conf-step__header::before {
+    left: 64px;
+  }
+  .conf-step__title::before {
+    left: 64px;
+  }
 }
 
-.login__label {
-  width: 100%;
-  margin-bottom: 0.8rem;
+@media screen and (max-width: 500px) {
+  .conf-step__header {
+    padding-left: 80px;
+  }
+  .conf-step__header .conf-step__title::before {
+    left: 45px;
+  }
+  .conf-step__header::before {
+    left: 45px;
+  }
+  .conf-step::before {
+    left: 45px;
+  }
 }
 
-.login__label:last-of-type {
-  margin-bottom: 0;
+@media screen and (max-width: 470px) {
+  .conf-step__header .conf-step__title {
+    display: table-caption;
+  }
 }
 
-.login__input {
-  width: 100%;
+@media screen and (max-width: 700px) {
+  .conf-step__header::after {
+    right: 28px;
+  }
+  .conf-step__legend {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .conf-step__legend .conf-step__chair:not(:first-of-type) {
+    margin-left: 0;
+  }
 }
 
-.popup {
-  display: none;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+@media screen and (min-width: 800px) {
+  .client-ui {
+    padding: 0 150px;
+  }
 }
 
-.popup__title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
+@media screen and (max-width: 1050px) {
+  .client-ui {
+    padding: 0 100px;
+  }
 }
 
-.popup.active {
-  display: block;
-  background: rgba(0, 0, 0, 0.7);
-  -webkit-animation: 0.5s ease-out 0s 1 darken;
-          animation: 0.5s ease-out 0s 1 darken;
+@media screen and (max-width: 800px) {
+  .client-ui {
+    padding: 0;
+  }
 }
 
-.popup.active .popup__content {
-  top: 100px;
-  -webkit-animation: 0.5s ease-out 0s 1 slideFromTop;
-          animation: 0.5s ease-out 0s 1 slideFromTop;
+@media screen and (min-width: 990px) {
+  .page-header, nav, main {
+    margin: auto;
+  }
+  .movie, .buying {
+    border-radius: 2px;
+  }
+  .buying__info-hint {
+    display: none;
+  }
 }
 
-.popup__container {
-  position: relative;
-  width: 100%;
+@media screen and (max-width: 1150px) {
+  .movies {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .movie {
+    width: 100%;
+  }
 }
-
-.popup__content {
-  position: relative;
-  top: -50vh;
-  background-color: rgba(234, 233, 235, 0.95);
-  width: 960px;
-  margin: 0 auto;
-}
-
-.popup__header {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 16px 42px;
-  background-color: #63536C;
-  color: #FFFFFF;
-}
-
-.popup__wrapper {
-  padding: 35px 104px;
-}
-
-.popup__dismiss {
-  float: right;
-}
-
-.popup__dismiss img {
-  height: 1em;
-  -webkit-transition: .3s all ease;
-  transition: .3s all ease;
-}
-
-.popup__dismiss img:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-  -webkit-transition: .3s all ease;
-  transition: .3s all ease;
-}
-/*# sourceMappingURL=admin.css.map */
+/*# sourceMappingURL=admin.module.css.map */
