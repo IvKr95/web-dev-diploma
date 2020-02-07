@@ -4,20 +4,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import AddHall from '../../forms/AddHall';
-import AddMovie from '../../forms/AddMovie';
-import DeleteHall from '../../forms/DeleteHall';
-import AddShow from '../../forms/AddShow';
-import DeleteShow from '../../forms/DeleteShow';
-import AddContacts from '../../forms/AddContacts';
+import AddHall from '../../admin/forms/AddHall';
+import AddMovie from '../../admin/forms/AddMovie';
+import DeleteHall from '../../admin/forms/DeleteHall';
+import AddShow from '../../admin/forms/AddShow';
+import DeleteShow from '../../admin/forms/DeleteShow';
+import styles from './css/modal.module.css';
 
 // Тело модального окна
 const ModalBody = (props) => {
   const {
-    onAddContacts: addContacts,
-    children,
-    email,
-    setEmail,
     action,
     onAddShow: addShow,
     onAddHall: addHall,
@@ -86,17 +82,6 @@ const ModalBody = (props) => {
           />
         );
         break;
-      case 'addContacts':
-        newModal = (
-          <AddContacts
-            onAddContacts={addContacts}
-            link={children}
-            email={email}
-            setEmail={setEmail}
-            onClose={handleModal}
-          />
-        );
-        break;
       default:
         newModal = '';
         break;
@@ -106,15 +91,13 @@ const ModalBody = (props) => {
   };
 
   return (
-    <div className="popup__wrapper">
+    <div className={styles.popup__wrapper}>
       {activeModal}
     </div>
   );
 };
 
 ModalBody.propTypes = {
-  email: PropTypes.string,
-  setEmail: PropTypes.func,
   action: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   shows: PropTypes.arrayOf(PropTypes.object),
@@ -126,10 +109,8 @@ ModalBody.propTypes = {
 };
 
 ModalBody.defaultProps = {
-  email: '',
   shows: [],
   itemToDelete: '',
-  setEmail: () => {},
   onAddShow: () => {},
   onAddHall: () => {},
   onAddMovie: () => {},

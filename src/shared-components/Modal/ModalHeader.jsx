@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './css/modal.module.css';
 
 // Хэдер модального окна
 function ModalHeader(props) {
@@ -11,11 +12,11 @@ function ModalHeader(props) {
   } = props;
 
   return (
-    <div className="popup__header">
-      <h2 className="popup__title">
+    <div className={styles.popup__header}>
+      <h2 className={styles.popup__title}>
         {action}
-        <button type="button" className="popup__dismiss" onClick={handleClose}>
-          <span>&times;</span>
+        <button type="button" className={styles.popup__dismiss} onClick={handleClose}>
+          <img src="i/close.png" alt="Закрыть" />
         </button>
       </h2>
     </div>

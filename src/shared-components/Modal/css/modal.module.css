@@ -1,0 +1,145 @@
+@-webkit-keyframes slideFromTop {
+  0% {
+    top: -50vh;
+  }
+  100% {
+    top: 100px;
+  }
+}
+
+@keyframes slideFromTop {
+  0% {
+    top: -50vh;
+  }
+  100% {
+    top: 100px;
+  }
+}
+
+@-webkit-keyframes darken {
+  0% {
+    background: 0;
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+@keyframes darken {
+  0% {
+    background: 0;
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.popup__title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.popup.active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-animation: 0.5s ease-out 0s 1 darken;
+          animation: 0.5s ease-out 0s 1 darken;
+}
+
+.popup.active .popup__content {
+  top: 100px;
+  -webkit-animation: 0.5s ease-out 0s 1 slideFromTop;
+          animation: 0.5s ease-out 0s 1 slideFromTop;
+}
+
+.popup__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.popup__content {
+  background-color: rgba(234, 233, 235, 0.95);
+  width: 960px;
+  margin: 0 auto;
+}
+
+.popup__header {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 16px 42px;
+  background-color: #63536C;
+  color: #FFFFFF;
+}
+
+.popup__wrapper {
+  padding: 35px 104px;
+}
+
+.popup__dismiss {
+  float: right;
+}
+
+.popup__dismiss img {
+  height: 1em;
+  -webkit-transition: .3s all ease;
+  transition: .3s all ease;
+}
+
+.popup__dismiss img:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+  -webkit-transition: .3s all ease;
+  transition: .3s all ease;
+}
+
+@media screen and (max-width: 500px) {
+  .popup__content {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .popup__content {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .popup__content {
+    width: 650px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .popup__content {
+    width: 750px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .popup__content {
+    width: 950px;
+  }
+}
+/*# sourceMappingURL=modal.module.css.map */
