@@ -39,7 +39,7 @@ function withAuthorization(Component, apiUrl) {
 
     // Получаем данные о пользователе с сервера
     // Ошибка если неудачно
-    const fetch = (callback) => {
+    const fetch = (callback = (f) => f) => {
       axios.get(
         apiUrl,
         {
@@ -101,7 +101,7 @@ function withAuthorization(Component, apiUrl) {
 
     // Пробуем разлогинить пользователя
     // Если не получается, выкидываем ошибку
-    const logout = (callback) => {
+    const logout = (callback = (f) => f) => {
       const currentUser = getCurrent();
       axios.post(
         apiUrl,

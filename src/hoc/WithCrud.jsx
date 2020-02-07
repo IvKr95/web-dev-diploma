@@ -12,17 +12,25 @@ const withCrud = (Component) => {
   // Дает нам функции (CRUD) для работы с сервером
   const WithCrud = (props) => {
     // Получаем данные (одно вхождение ? правильно так писать вообще?)
-    const get = (data) => {
-      axios.get(data.url, {
-        params: data.body,
-      })
+    const get = ({
+      url = '',
+      body = {},
+      parsify = false,
+      callback = (f) => f,
+    }) => {
+      axios.get(
+        url,
+        {
+          params: body,
+        },
+      )
         .then((response) => {
           if (response.status === 200) {
-            if (data.parsify) {
+            if (parsify) {
               const map = JSON.parse(response.data.hallMap);
-              data.callback(map);
+              callback(map);
             } else {
-              data.callback(response.data);
+              callback(response.data);
             }
           }
         })
@@ -38,7 +46,11 @@ const withCrud = (Component) => {
     };
 
     // Получаем список (несколько вхождений)
-    const list = ({ url, params, callback }) => {
+    const list = ({
+      url = '',
+      params,
+      callback = (f) => f,
+    }) => {
       axios.get(
         url,
         {
@@ -65,7 +77,10 @@ const withCrud = (Component) => {
 
     // Добавляем данные
     const add = ({
-      url, body, responseType, callback,
+      url = '',
+      body = {},
+      responseType = '',
+      callback = (f) => f,
     }) => {
       axios.post(
         url,
@@ -100,7 +115,11 @@ const withCrud = (Component) => {
     };
 
     // Обновляем
-    const update = ({ url, body, callback }) => {
+    const update = ({
+      url = '',
+      body = {},
+      callback = (f) => f,
+    }) => {
       axios.put(
         url,
         body,
@@ -124,7 +143,11 @@ const withCrud = (Component) => {
     };
 
     // Удаляем
-    const remove = ({ url, params, callback }) => {
+    const remove = ({
+      url = '',
+      params = {},
+      callback = (f) => f,
+    }) => {
       axios.delete(
         url,
         {

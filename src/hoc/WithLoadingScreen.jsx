@@ -11,7 +11,7 @@ const withLoadingScreen = (Component) => {
   // Оборачиваем компоненты которым нужен
   // загрузочный экран пока работаем с сервером
   const WithLoadingScreen = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
       <Component
