@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import Ticket from '../../models/Ticket';
 import HallMapRow from './HallMapRow';
 import HallMapSeat from './HallMapSeat';
+import HallSchemaLegend from './HallSchemaLegend';
+import styles from './css/HallPage.module.css';
 
 const DISABLED_SEAT = 'disabled';
 const STANDARD_SEAT = 'standard';
@@ -16,9 +18,12 @@ function HallSchema(props) {
     hallMap,
     setHallMap,
     hall,
-    children,
     setTickets,
   } = props;
+
+  const handleDoubleClick = (event) => {
+    event.currentTarget.classList.toggle(styles.zoomedin);
+  };
 
   // Обрабатывает клик на кресло
   // Создает билет
@@ -68,8 +73,8 @@ function HallSchema(props) {
   };
 
   return (
-    <div className="buying-scheme">
-      <div className="buying-scheme__wrapper">
+    <div className={styles['buying-scheme']} onDoubleClick={handleDoubleClick}>
+      <div className={styles['buying-scheme__wrapper']}>
         {hallMap.map((row, r) => (
           <HallMapRow key={`row_${r}`}>
             {row.map((seat, s) => {
@@ -82,7 +87,7 @@ function HallSchema(props) {
           </HallMapRow>
         ))}
       </div>
-      {children}
+      <HallSchemaLegend hall={hall} />
     </div>
   );
 }
@@ -98,7 +103,6 @@ HallSchema.propTypes = {
     standardPrice: PropTypes.number,
     vipPrice: PropTypes.number,
   }).isRequired,
-  children: PropTypes.element.isRequired,
   setTickets: PropTypes.func.isRequired,
 };
 

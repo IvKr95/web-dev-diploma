@@ -2,35 +2,15 @@
 /* eslint-disable no-use-before-define */
 
 import React, { useState, useEffect } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import Header from '../../../shared-components/Header';
-import Main from '../../../shared-components/Main';
+import Header from '../../../shared-components/Header/Header';
+import Main from '../../../shared-components/Main/Main';
 import Hall from './Hall';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import withCrud from '../../../hoc/WithCrud';
-import HallInfo from './HallInfo';
-import HallSchema from './HallSchema';
-import HallSchemaLegend from './HallSchemaLegend';
-import '../../css/client.css';
-
-import Modal from '../../../shared-components/Modal/Modal';
-import ModalBody from '../../../shared-components/Modal/ModalBody';
-import ModalHeader from '../../../shared-components/Modal/ModalHeader';
-
-const ACTIVE_BUTTON_CSS = {
-  pointerEvents: 'auto',
-  backgroundColor: '#16A6AF',
-};
-
-const INACTIVE_BUTTON_CSS = {
-  pointerEvents: 'none',
-  backgroundColor: 'grey',
-};
-
-const DEFAULT_EMAIL = '';
 
 // Главный компонент для рута hall
 // Получает загрузочное окно
@@ -50,20 +30,13 @@ const HallPage = (props) => {
   // Сюда подгружаются выбранные места
   const [tickets, setTickets] = useState([]);
   const [isButtonActive, setIsButtonActive] = useState(false);
-  const [isModalActive, setIsModalActive] = useState(false);
-  // Этот адресс будет потом использоваться для отправки QR кода
-  const [email, setEmail] = useState(DEFAULT_EMAIL);
 
   useEffect(() => {
-    if (tickets.length > 0) {
-      setIsButtonActive(true);
-    } else {
-      setIsButtonActive(false);
-    }
+    setIsButtonActive(tickets.length > 0);
   }, [tickets.length]);
 
   useEffect(() => {
-    // Если переходим с домашней страницы то получаем данные
+    // Если переходим с домашней страницы, то получаем данные
     if (state && state.fromHomePage) {
       fetchHall();
       fetchShowData();
@@ -104,51 +77,8 @@ const HallPage = (props) => {
     });
   };
 
-  const handleClick = () => {
-    setIsModalActive(true);
-  };
-
-  const handleClose = () => {
-    setIsModalActive(!isModalActive);
-    // handleAction(event, item);
-  };
-
   return (
     <>
-      {/* Если модальное окно активно, то показываем его */}
-      {/* Вот тут-то я и подвис */}
-      {isModalActive && (
-        <Modal isModalActive={isModalActive}>
-          <ModalHeader action="Оформление заказа" onClose={handleClose} />
-          <ModalBody
-            email={email}
-            setEmail={setEmail}
-            action="addContacts"
-            onClose={handleClose}
-          >
-            <Link
-              className="acceptin-button"
-              style={isButtonActive ? ACTIVE_BUTTON_CSS : INACTIVE_BUTTON_CSS}
-              to={{
-                pathname: '/payment',
-                params: {
-                  email,
-                  tickets,
-                  data: params,
-                  hallMap,
-                  setHallMap,
-                },
-                state: {
-                  fromHallPage: true,
-                },
-              }}
-              role="button"
-            >
-Далее
-            </Link>
-          </ModalBody>
-        </Modal>
-      )}
       {
         // Если переходим с домашней, то отображаем страницу
         state && state.fromHomePage
@@ -157,29 +87,15 @@ const HallPage = (props) => {
               <Header />
               <Main>
                 {isLoading && <LoadingScreen />}
-
                 <Hall
+                  data={params}
+                  hall={hall}
                   hallMap={hallMap}
                   setHallMap={setHallMap}
-                >
-                  <HallInfo data={params} />
-                  <HallSchema
-                    hallMap={hallMap}
-                    setHallMap={setHallMap}
-                    hall={hall}
-                    setTickets={setTickets}
-                  >
-                    <HallSchemaLegend hall={hall} />
-                  </HallSchema>
-                  <button
-                    type="button"
-                    className="acceptin-button"
-                    style={isButtonActive ? ACTIVE_BUTTON_CSS : INACTIVE_BUTTON_CSS}
-                    onClick={handleClick}
-                  >
-Забронировать
-                  </button>
-                </Hall>
+                  isButtonActive={isButtonActive}
+                  tickets={tickets}
+                  setTickets={setTickets}
+                />
               </Main>
             </ClientUI>
             // Если нет, то переводим обратно на главную

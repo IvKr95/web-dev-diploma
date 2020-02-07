@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './css/HallPage.module.css';
 
 // Отображает отдельный ряд с местами
 function HallMapRow({ children }) {
   return (
-    <div className="buying-scheme__row" role="row">{children}</div>
+    <div className={styles['buying-scheme__row']} role="row">{children}</div>
   );
 }
 

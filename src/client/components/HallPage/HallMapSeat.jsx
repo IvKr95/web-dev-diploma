@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './css/HallPage.module.css';
 
 // Отображает одно место в ряду
 function HallMapSeat(props) {
@@ -15,7 +16,7 @@ function HallMapSeat(props) {
   if (seat.isTaken || !seat.isAvail) {
     return (
       <span
-        className={`buying-scheme__chair buying-scheme__chair_${seat.type} buying-scheme__chair_taken`}
+        className={`${styles['buying-scheme__chair']} ${styles[`buying-scheme__chair_${seat.type}`]} ${styles['buying-scheme__chair_taken']}`}
         role="cell"
       />
     );
@@ -23,7 +24,7 @@ function HallMapSeat(props) {
   // Если кресло свободно и доступно
   return (
     <span
-      className={`buying-scheme__chair buying-scheme__chair_${seat.type} ${seat.isSelected ? 'buying-scheme__chair_selected' : ''}`}
+      className={`${styles['buying-scheme__chair']} ${styles[`buying-scheme__chair_${seat.type}`]} ${styles[seat.isSelected ? 'buying-scheme__chair_selected' : '']}`}
       onClick={() => handleClick(nRow, nSeat, seat)}
       onKeyPress={() => handleClick(nRow, nSeat, seat)}
       role="cell"
