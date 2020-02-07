@@ -4,7 +4,6 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import '../css/admin.css';
 
 // Здесь лежит все состояния рута admin
 // Стоит ли так вообще делать?

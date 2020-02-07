@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import nanoid from 'nanoid';
 import DateContext from '../../contexts/DateContext';
 import Show from '../models/Show';
-import '../css/admin.css';
+import styles from '../css/admin.module.css';
 
 // Здесь вся логика admin
 const withAdminLogic = (Component) => {
@@ -43,9 +43,13 @@ const withAdminLogic = (Component) => {
     const { chosen } = useContext(DateContext);
 
     useEffect(() => {
+      document.body.classList.add(styles['admin-theme']);
       setIsLoading(true);
       fetchHalls();
       fetchMovies();
+      return () => {
+        document.body.classList.remove(styles['admin-theme']);
+      };
     }, []);
 
     // Когда меняется дата, получаем сеансы по ней
@@ -66,8 +70,6 @@ const withAdminLogic = (Component) => {
             setHalls(data);
             setActiveHall(data[0]);
             setActiveHallMap(JSON.parse(data[0].hallSchema));
-          } else {
-            setHalls(data);
           }
         },
       });
@@ -129,54 +131,64 @@ const withAdminLogic = (Component) => {
       event.preventDefault();
 
       if (action === 'deleteHall') {
-        remove({
-          url: process.env.REACT_APP_INDEX_URL,
-          params: {
-            action: 'deleteShows',
-            table: 'shows',
-            target: itemToDelete,
-          },
-          callback: () => {
-            remove({
-              url: process.env.REACT_APP_INDEX_URL,
-              params: {
-                action,
-                table: 'halls',
-                target: itemToDelete,
-              },
-              callback: () => {
-                fetchHalls();
-                fetchShows();
-              },
-            });
-          },
-        });
+        deleteHall();
       } else {
-        remove({
-          url: process.env.REACT_APP_INDEX_URL,
-          params: {
-            action,
-            table: 'shows',
-            target: itemToDelete.showId,
-          },
-          callback: () => {
-            fetchShows();
-          },
-        });
+        deleteShow();
       }
 
       setItemToDelete('');
       handleModal(event);
     };
 
+    const deleteHall = () => {
+      remove({
+        url: process.env.REACT_APP_INDEX_URL,
+        params: {
+          action: 'deleteShows',
+          table: 'shows',
+          target: itemToDelete,
+        },
+        callback() {
+          remove({
+            url: process.env.REACT_APP_INDEX_URL,
+            params: {
+              action,
+              table: 'halls',
+              target: itemToDelete,
+            },
+            callback() {
+              fetchHalls();
+              fetchShows();
+            },
+          });
+        },
+      });
+    };
+
+    const deleteShow = () => {
+      remove({
+        url: process.env.REACT_APP_INDEX_URL,
+        params: {
+          action,
+          table: 'shows',
+          target: itemToDelete.showId,
+        },
+        callback() {
+          fetchShows();
+        },
+      });
+    };
+
     // Открываем зал для продаж
     const openSales = (event) => {
+      const { isOpen, hallName } = activeHall;
+
       const data = {
-        state: activeHall.isOpen === 'false' ? 'true' : 'false',
+        state: isOpen === 'false' ? 'true' : 'false',
       };
 
       update({
-        url: `${process.env.REACT_APP_INDEX_URL}/${activeHall.hallName}`,
+        url: `${process.env.REACT_APP_INDEX_URL}/${hallName}`,
         body: {
           action: event.target.dataset.action,
           table: 'halls',
@@ -229,12 +241,13 @@ const withAdminLogic = (Component) => {
       const { name } = event.currentTarget.dataset;
 
       setHeaders((prev) => {
-        prev.forEach((h) => {
+        const copy = [...prev];
+        prev.forEach((h, i) => {
           if (name === h.name) {
-            h.isOpen = !h.isOpen;
+            copy[i].isOpen = !h.isOpen;
           }
         });
-        return [...prev];
+        return copy;
       });
     };
 
