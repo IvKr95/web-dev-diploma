@@ -5,16 +5,15 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import Header from '../../../shared-components/Header';
+import Header from '../../../shared-components/Header/Header';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
-import Main from '../../../shared-components/Main';
+import Main from '../../../shared-components/Main/Main';
 import Ticket from './Ticket';
 import DateContext from '../../../contexts/DateContext';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import withCrud from '../../../hoc/WithCrud';
 import Order from '../../models/Order';
 import updateHallMap from '../../js/updateHallMap';
-import '../../css/client.css';
 
 // Главная для страницы билета
 // Принимает функции для работы с сервером
@@ -60,7 +59,6 @@ const TicketPage = (props) => {
       time: data.time.time,
       orderId: order.id,
       tickets: JSON.stringify(order.tickets),
-      email: state.email,
     };
 
     setIsLoading(true);
@@ -91,7 +89,14 @@ const TicketPage = (props) => {
             <Main>
               {isLoading
                 ? <LoadingScreen />
-                : <Ticket data={state.data} tickets={state.tickets} qr={qr} />}
+                : (
+                  <Ticket
+                    data={state.data}
+                    tickets={state.tickets}
+                    orderId={state.newOrder.id}
+                    qr={qr}
+                  />
+                )}
             </Main>
           </ClientUI>
         ) : <Redirect to="/" />
