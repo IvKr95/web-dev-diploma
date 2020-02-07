@@ -6,16 +6,15 @@ import PropTypes from 'prop-types';
 
 import ClientUI from '../ClientUI';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
-import Header from '../../../shared-components/Header';
-import Main from '../../../shared-components/Main';
-import Nav from '../../../shared-components/Nav';
+import Header from '../../../shared-components/Header/Header';
+import Main from '../../../shared-components/Main/Main';
+import Nav from '../../../shared-components/Nav/Nav';
 
 import MovieList from './MovieList';
 import Movie from './Movie';
 import withCrud from '../../../hoc/WithCrud';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import DateContext from '../../../contexts/DateContext';
-import '../../css/client.css';
 
 // Главная страница приложения
 // Принимает загрузочные экран
@@ -23,7 +22,7 @@ import '../../css/client.css';
 // Содержит массив сеансов
 const HomePage = (props) => {
   const { list, isLoading, setIsLoading } = props;
-  const [shows, setShows] = useState([]);
+  const [allMoviesShows, setAllMoviesShows] = useState([]);
   const { chosen } = useContext(DateContext);
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const HomePage = (props) => {
         param: chosen,
       },
       callback(data) {
-        setShows(data);
+        setAllMoviesShows(data);
         setIsLoading(false);
       },
     });
@@ -49,15 +48,15 @@ const HomePage = (props) => {
   return (
     <ClientUI>
       <Header />
-      <Nav />
+      <Nav isHomePage />
       {isLoading ? (
         <LoadingScreen />
       ) : (
         <Main>
-          {shows.length > 0 && (
-            <MovieList>
-              {shows.map((show) => <Movie key={`${chosen}_${show.movieName}`} show={show} />)}
-            </MovieList>
+          {allMoviesShows.length > 0 && (
+          <MovieList>
+            {allMoviesShows.map((movieShows) => <Movie key={`${chosen}_${movieShows.movieName}`} movieShows={movieShows} />)}
+          </MovieList>
           )}
         </Main>
       )}

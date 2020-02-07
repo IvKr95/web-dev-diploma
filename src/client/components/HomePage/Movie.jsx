@@ -8,19 +8,20 @@ import MovieSeances from './MovieSeances';
 import withCrud from '../../../hoc/WithCrud';
 import withLoadingScreen from '../../../hoc/WithLoadingScreen';
 import LoadingScreen from '../../../shared-components/LoadingScreen';
+import styles from './css/HomePage.module.css';
 
 // Для каждого фильма свой
 // Совершает запросы чтобы получить информацию о фильме
 // Есть загрузочный экран
 const Movie = (props) => {
   const {
-    show,
+    movieShows,
     get,
     isLoading,
     setIsLoading,
   } = props;
   const [movie, setMovie] = useState({});
-  const [seances, setSeances] = useState([]);
+  const [shows, setShows] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -34,7 +35,7 @@ const Movie = (props) => {
       body: {
         action: 'getMovieByName',
         table: 'movies',
-        param: show.movieName,
+        param: movieShows.movieName,
       },
       parsify: false,
       callback(data) {
@@ -45,17 +46,17 @@ const Movie = (props) => {
   };
 
   const setNewSeanses = () => {
-    const newSeances = Object.entries(show.shows);
-    setSeances(newSeances);
+    const newShows = Object.entries(movieShows.shows);
+    setShows(newShows);
   };
 
   return (
     <>
-      <section className="movie">
+      <section className={styles.movie}>
         {isLoading && <LoadingScreen />}
         <MovieInfo movie={movie} />
         <MovieSeances
-          seances={seances}
+          shows={shows}
           movieName={movie.name}
           movieId={movie.movieId}
         />
@@ -65,7 +66,7 @@ const Movie = (props) => {
 };
 
 Movie.propTypes = {
-  show: PropTypes.shape({
+  movieShows: PropTypes.shape({
     movieName: PropTypes.string.isRequired,
     shows: PropTypes.object.isRequired,
   }).isRequired,
