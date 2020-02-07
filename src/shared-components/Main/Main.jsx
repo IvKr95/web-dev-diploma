@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Main.css';
 
 // Семантически оборачивает содержимое
 // Если в администраторской, то задаем класс

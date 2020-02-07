@@ -1,0 +1,28 @@
+.conf-steps {
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 500px) {
+  .conf-steps {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .conf-steps {
+    width: 650px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .conf-steps {
+    width: 750px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .conf-steps {
+    width: 950px;
+  }
+}
+/*# sourceMappingURL=Main.css.map */
