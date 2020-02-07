@@ -2,6 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
 const SHOW_MOVIE_CSS = {
   width: '60px',
@@ -26,19 +27,23 @@ function ModuleShow(props) {
     show.hall === hallName
         && (
         <div
-          className="conf-step__seances-movie"
+          className={styles['conf-step__seances-movie']}
           style={{ ...SHOW_MOVIE_CSS, left: `${leftPos}px` }}
         >
           <button
             type="button"
-            className="conf-step__seances-movie__dismiss"
+            className={styles['conf-step__seances-movie__dismiss']}
             data-action="deleteShowTime"
             onClick={(e) => handleModal(e, show)}
           >
             <span>&times;</span>
           </button>
-          <p className="conf-step__seances-movie-title">{show.movieName}</p>
-          <p className="conf-step__seances-movie-start">{show.time}</p>
+          <p className={styles['conf-step__seances-movie-title']}>
+            {show.movieName}
+          </p>
+          <p className={styles['conf-step__seances-movie-start']}>
+            {show.time}
+          </p>
         </div>
         )
   );

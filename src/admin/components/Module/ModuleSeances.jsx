@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import ModuleHall from './ModuleHall';
 import DragContext from '../../../contexts/DragContext';
+import styles from '../../css/admin.module.css';
 
 // Отображает сеансы
 function ModuleSeances(props) {
@@ -19,12 +20,12 @@ function ModuleSeances(props) {
 
   const handleDrop = (event, element) => {
     setDroppedIn(element);
-    event.target.classList.remove('hold');
+    event.target.classList.remove(styles.hovered);
     handleModal(event, element);
   };
 
   return (
-    <div className="conf-step__seances">
+    <div className={styles['conf-step__seances']}>
       {
         halls.map(
           (hall) => (

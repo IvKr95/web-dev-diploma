@@ -2,10 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import handleDragEnter from '../../js/handleDragEnter';
-import handleDragLeave from '../../js/handleDragLeave';
-import handleDragOver from '../../js/handleDragOver';
 import ModuleShow from './ModuleShow';
+import styles from '../../css/admin.module.css';
 
 // Показывает зал с таймлайном
 // И всеми шоу в этом таймлайне
@@ -18,11 +16,23 @@ function ModuleHall(props) {
   } = props;
   const { hallName } = hall;
 
+  const handleDragEnter = (event) => {
+    event.target.classList.add(styles.hovered);
+  };
+
+  const handleDragLeave = (event) => {
+    event.target.classList.remove(styles.hovered);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="conf-step__seances-hall">
-      <h3 className="conf-step__seances-title">{hallName}</h3>
+    <div className={styles['conf-step__seances-hall']}>
+      <h3 className={styles['conf-step__seances-title']}>{hallName}</h3>
       <div
-        className="conf-step__seances-timeline"
+        className={styles['conf-step__seances-timeline']}
         data-action="addShowTime"
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}

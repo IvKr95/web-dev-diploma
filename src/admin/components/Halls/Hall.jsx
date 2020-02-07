@@ -3,6 +3,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
 // Показывает зал и кнопку для его удаления
 function Hall(props) {
@@ -16,7 +17,7 @@ function Hall(props) {
       {hallName}
       <button
         type="button"
-        className="conf-step__button conf-step__button-trash"
+        className={`${styles['conf-step__button']} ${styles['conf-step__button-trash']}`}
         data-action="deleteHall"
         onClick={(event) => handleModal(event, hallName)}
       />

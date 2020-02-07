@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
 // Здесь открываем или закрываем зал для продаж
 function OpenSales(props) {
@@ -11,10 +12,10 @@ function OpenSales(props) {
 
   return (
     <>
-      <p className="conf-step__paragraph">Всё готово, теперь можно:</p>
+      <p className={styles['conf-step__paragraph']}>Всё готово, теперь можно:</p>
       <button
         type="button"
-        className="conf-step__button conf-step__button-accent"
+        className={`${styles['conf-step__button']} ${styles['conf-step__button-accent']}`}
         data-action="openSales"
         onClick={openSales}
       >

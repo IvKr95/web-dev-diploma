@@ -2,9 +2,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
-const HEADER_OPEN = 'conf-step__header conf-step__header_opened';
-const HEADER_CLOSED = 'conf-step__header conf-step__header_closed';
+const HEADER_OPEN = `${styles['conf-step__header']} ${styles['conf-step__header_opened']}`;
+const HEADER_CLOSED = `${styles['conf-step__header']} ${styles['conf-step__header_closed']}`;
 
 // Показывает хэдер модуля
 function ModuleHeader(props) {
@@ -25,7 +26,7 @@ function ModuleHeader(props) {
       data-name={header.name}
       tabIndex={0}
     >
-      <h2 className="conf-step__title">{header.name}</h2>
+      <h2 className={styles['conf-step__title']}>{header.name}</h2>
     </header>
   );
 }

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ActiveHallMap from './ActiveHallMap';
-import SetHallMap from '../../../forms/SetHallMap';
+import SetHallMap from '../../forms/SetHallMap';
 import ConfStepLegend from '../Module/ModuleLegend';
 import ModuleBtns from '../Module/ModuleBtns';
 
@@ -33,7 +33,7 @@ const HallMap = (props) => {
     event.preventDefault();
 
     updateHall(hallMapParams);
-    setHallMapParams(DEFAULT_HALL_MAP_PARAMS);
+    handleReset();
   };
 
   return (

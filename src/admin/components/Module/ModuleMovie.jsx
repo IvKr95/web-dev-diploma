@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import DragContext from '../../../contexts/DragContext';
+import styles from '../../css/admin.module.css';
 
 // Отображает отдельный фильм
 function ModuleMovie({ movie }) {
@@ -14,26 +15,26 @@ function ModuleMovie({ movie }) {
 
   const handleDragStart = (event) => {
     const element = event.target;
-    element.classList.add('hold');
+    element.classList.add(styles.hold);
     setDragging(name);
-    setTimeout(() => element.classList.add('invisible'), 0);
+    setTimeout(() => element.classList.add(styles.invisible), 0);
   };
 
   const handleDragEnd = (event) => {
-    event.target.classList.remove('hold');
-    event.target.classList.remove('invisible');
+    event.target.classList.remove(styles.hold);
+    event.target.classList.remove(styles.invisible);
   };
 
   return (
     <div
-      className="conf-step__movie"
+      className={styles['conf-step__movie']}
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <img className="conf-step__movie-poster" src={poster} alt="poster" draggable="false" />
-      <h3 className="conf-step__movie-title">{name}</h3>
-      <p className="conf-step__movie-duration">{duration}</p>
+      <img className={styles['conf-step__movie-poster']} src={poster} alt="poster" draggable="false" />
+      <h3 className={styles['conf-step__movie-title']}>{name}</h3>
+      <p className={styles['conf-step__movie-duration']}>{duration}</p>
     </div>
   );
 }

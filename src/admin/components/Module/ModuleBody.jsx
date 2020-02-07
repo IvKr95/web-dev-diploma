@@ -2,9 +2,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
-const CENTERED = 'conf-step__wrapper text-center';
-const NOT_CENTERED = 'conf-step__wrapper';
+const CENTERED = `${styles['conf-step__wrapper']} ${styles['text-center']}`;
+const NOT_CENTERED = styles['conf-step__wrapper'];
 
 // Обертка для тела модуля
 // Также решаем должен ли текст разполагаться по центру

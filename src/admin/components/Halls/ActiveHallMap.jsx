@@ -5,6 +5,7 @@
 
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styles from '../../css/admin.module.css';
 
 const SEAT_TYPES = ['standard', 'vip', 'disabled'];
 
@@ -24,7 +25,7 @@ function ActiveHallMap(props) {
     }
   }, [maxSeatsInRow, rows]);
 
-  const handleChangeSeatType = (prevSeat, row, seat) => {
+  const handleChangeSeatType = (prevSeat, rowIndex, seatIndex) => {
     let newSeatType;
 
     if (prevSeat === SEAT_TYPES[0]) {
@@ -36,8 +37,9 @@ function ActiveHallMap(props) {
     }
 
     setActiveHallMap((prev) => {
-      prev[row][seat] = newSeatType;
-      return [...prev];
+      const hallMapCopy = [...prev];
+      hallMapCopy[rowIndex][seatIndex] = newSeatType;
+      return [...hallMapCopy];
     });
   };
 
@@ -55,22 +57,22 @@ function ActiveHallMap(props) {
   };
 
   return (
-    <div className="conf-step__hall">
-      <div className="conf-step__hall-wrapper">
+    <div className={styles['conf-step__hall']}>
+      <div className={styles['conf-step__hall-wrapper']}>
         {
-          activeHallMap.map((r, i) => (
+          activeHallMap.map((row, rowIndex) => (
             <div
-              className="conf-step__row"
-              key={`row_${i}`}
+              className={styles['conf-step__row']}
+              key={`row_${rowIndex}`}
               role="row"
             >
               {
-                r.map((s, j) => (
+                row.map((seat, seatIndex) => (
                   <span
-                    key={`seat_${j}`}
-                    className={`conf-step__chair conf-step__chair_${s}`}
-                    onClick={() => handleChangeSeatType(s, i, j)}
-                    onKeyPress={() => handleChangeSeatType(s, i, j)}
+                    key={`seat_${seatIndex}`}
+                    className={`${styles['conf-step__chair']} ${styles[`conf-step__chair_${seat}`]}`}
+                    onClick={() => handleChangeSeatType(seat, rowIndex, seatIndex)}
+                    onKeyPress={() => handleChangeSeatType(seat, rowIndex, seatIndex)}
                     role="cell"
                   />
                 ))

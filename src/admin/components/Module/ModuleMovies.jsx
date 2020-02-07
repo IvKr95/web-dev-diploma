@@ -3,11 +3,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ModuleMovie from './ModuleMovie';
+import styles from '../../css/admin.module.css';
 
 // Отображает все фильмы
 function ModuleMovies({ movies }) {
   return (
-    <div className="conf-step__movies">
+    <div className={styles['conf-step__movies']}>
       {movies.map((movie) => <ModuleMovie key={movie.movieId} movie={movie} />)}
     </div>
   );
