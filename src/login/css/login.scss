@@ -1,0 +1,128 @@
+$lilac: #63536C;
+$green: #16A6AF;
+$black: #000000;
+$white: #FFFFFF;
+$grey: #848484;
+
+$colwidth: 42px;
+$gapwidth: 20px;
+  
+.text-center {
+  text-align: center;
+}
+
+.login {
+    width: 480px;
+    margin: 0 auto;
+  
+    position: relative;
+    background-color: rgba(234, 233, 235, 0.95);
+  
+    &__wrapper {
+      padding: 35px (2 * $colwidth + $gapwidth);
+    }
+  
+    &__header {
+      position: relative;
+      box-sizing: border-box;
+      padding: 16px (2 * $colwidth + $gapwidth);
+  
+      background-color: $lilac;
+      color: $white;
+    }
+  
+    &__title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+    }
+  
+    &__label {
+      width: 100%;
+      margin-bottom: 0.8rem;
+  
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  
+    &__input {
+      width: 100%;
+    }
+}
+
+.login__button {
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.24), 0px 0px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+  border: none;
+  background-color: $white;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 1.4rem;
+  transition-property: background-color;
+  transition-duration: .5s;
+  transition-timing-function: ease;   
+  
+  &:hover,
+  &:focus{
+    background-color: #EEEAF1;
+    outline: none;  
+  }
+  
+  &:active {
+    position: relative;
+    top: 2px;
+    background-color: $lilac;
+    color: $white;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }
+  
+  & + & {
+    margin-left: 12px;
+  }
+  
+}
+
+.login__button {
+  color: $white;
+  background-color: $green;
+  padding: 12px 32px;
+  margin-top: 17px;
+  
+  &:hover,
+  &:focus{
+    background-color: #2FC9D2;
+    outline: none;
+  }
+  
+  &:active {
+    position: relative;
+    top: 2px;
+    background-color: #146C72;
+    color: $white;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  }  
+  
+}
+
+.login__label {
+  display: inline-block;
+  font-size: 1.2rem;
+  color: $grey;
+}
+
+.login__input {
+  display: block;
+  width: 100%;
+  margin-top: 1px;
+  padding: 8px;
+  font-size: 1.6rem;
+  color: $black;
+  border: 1px solid #b7b7b7;
+
+  &:focus {
+    outline: 1px #CF87FF solid;
+    outline-offset: -1px;
+  }
+}

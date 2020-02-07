@@ -103,7 +103,6 @@ E-mail
           <div className="text-center">
             <input type="submit" className="login__button" name="submit" value="Авторизоваться" />
           </div>
-
         </form>
       </div>
     </section>
