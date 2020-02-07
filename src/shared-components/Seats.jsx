@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import styles from '../client/components/PaymentPage/css/PaymentPage.module.css';
 // Отображаем выбранные места в зале
 function Seats({ row, seat }) {
   return (
     <>
 Ряд:
       {' '}
-      <span className="ticket__details ticket__chairs">{row}</span>
+      <span className={`${styles.ticket__details} ${styles.ticket__chairs}`}>{row}</span>
 Место:
       {' '}
-      <span className="ticket__details ticket__chairs">{seat}</span>
+      <span className={`${styles.ticket__details} ${styles.ticket__chairs}`}>{seat}</span>
     </>
   );
 }
