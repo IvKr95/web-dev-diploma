@@ -2,8 +2,9 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import LoginContext from '../contexts/LoginContext';
-import withAuthorization from '../hoc/WithAuthorization';
+import LoginContext from '../../contexts/LoginContext';
+import withAuthorization from '../../hoc/WithAuthorization';
+import styles from './css/header.module.css';
 
 const linkStyle = {
   color: 'inherit',
@@ -17,9 +18,39 @@ function Header(props) {
   const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext);
   const { isAdminPage, logout } = props;
 
+  const notLoggedInSlot = (
+    <Link
+      to="/login"
+      className={styles['page-header__title']}
+      title="Зайти используя логин"
+    >
+Login
+    </Link>
+  );
+
+  const loggedInSlot = (
+    <>
+      <Link
+        to="/admin"
+        className={styles['page-header__title']}
+        title="Перейти на страницу администратора"
+      >
+Admin
+      </Link>
+      <button
+        type="button"
+        className={styles['page-header__title']}
+        onClick={() => logout(setIsLoggedIn)}
+        title="Выйти из учетной записи"
+      >
+Logout
+      </button>
+    </>
+  );
+
   return (
-    <header className="page-header">
-      <h1 className="page-header__title">
+    <header className={styles['page-header']}>
+      <h1 className={styles['page-header__title']}>
         <Link
           style={linkStyle}
           to="/"
@@ -29,38 +60,10 @@ function Header(props) {
           <span>в</span>
 кино
         </Link>
-        {isAdminPage && <span className="page-header__subtitle">Администраторская</span>}
+        {isAdminPage && <span className={styles['page-header__subtitle']}>Администраторская</span>}
       </h1>
 
-      {!isLoggedIn
-        ? (
-          <Link
-            to="/login"
-            className="page-header__title"
-            title="Зайти используя логин"
-          >
-Login
-          </Link>
-        )
-        : (
-          <>
-            <Link
-              to="/admin"
-              className="page-header__title"
-              title="Перейти на страницу администратора"
-            >
-Admin
-            </Link>
-            <button
-              type="button"
-              className="page-header__title"
-              onClick={() => logout(setIsLoggedIn)}
-              title="Выйти из учетной записи"
-            >
-Logout
-            </button>
-          </>
-        )}
+      {!isLoggedIn ? notLoggedInSlot : loggedInSlot}
     </header>
   );
 }
