@@ -1,0 +1,81 @@
+@import './variables';
+@import './resets';
+
+.page-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    align-items: stretch;
+    color: $black;
+    z-index: 10;
+    
+  .page-nav__day {
+    flex-basis: calc(100% / 8);
+    font-size: 1.2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.12);
+    border-radius: 2px;
+    text-decoration: none;
+    color: $black;
+    
+    & + .page-nav__day {
+      margin-left: 1px;
+    }
+    
+    .page-nav__day-week::after {
+      content: ',';
+    }
+    
+    .page-nav__day-number::before {
+      content: ' ';
+    }    
+    
+    .page-nav__day-week, .page-nav__day-number {
+      display: block;
+    }  
+  }
+  
+  .page-nav__day_chosen {
+    flex-grow: 1;
+    background-color: $white;
+    font-weight: 700;
+    transform: scale(1.1);
+  }
+  
+  .page-nav__day_weekend {
+    color: #DE2121;
+  }
+
+  .page-nav__day_prev {
+    text-align: center;
+
+    &::before {
+      content: '<';
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 2.4rem;
+    }    
+  }
+  
+  .page-nav__day_next {
+    text-align: center;
+
+    &::before {
+      content: '>';
+      font-family: monospace;
+      font-weight: 700;
+      font-size: 2.4rem;
+    }    
+  }
+  
+  .page-nav__day_today {
+    .page-nav__day-week::before {
+      content: 'Сегодня';
+      display: block;
+    } 
+    .page-nav__day-week, .page-nav__day-number {
+      display: inline;
+    }    
+  }   
+}

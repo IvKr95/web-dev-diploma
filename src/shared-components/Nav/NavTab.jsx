@@ -2,14 +2,15 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import DateContext from '../contexts/DateContext';
+import DateContext from '../../contexts/DateContext';
+import styles from './css/nav.module.css';
 
 // Класс применяемый к текущей дате
-const NAV_TODAY = 'page-nav__day page-nav__day_today';
+const NAV_TODAY = styles['page-nav__day_today'];
 // Класс применяемый к выбранной дате
-const NAV_CHOSEN = 'page-nav__day_chosen';
+const NAV_CHOSEN = styles['page-nav__day_chosen'];
 // Класс применяемый к выходному дню
-const NAV_WEEKEND = 'page-nav__day_weekend';
+const NAV_WEEKEND = styles['page-nav__day_weekend'];
 
 // Отображает один блок даты в навигации по датам
 function NavTab(props) {
@@ -28,12 +29,12 @@ function NavTab(props) {
   return (
     <button
       type="button"
-      className={`page-nav__day ${todayClass} ${chosenClass} ${weekendClass}`}
+      className={`${styles['page-nav__day']} ${todayClass} ${chosenClass} ${weekendClass}`}
       onClick={handleChoose}
       data-date={date.format('L')}
     >
-      <span className="page-nav__day-week">{date.format('dd').toUpperCase()}</span>
-      <span className="page-nav__day-number">{date.format('DD')}</span>
+      <span className={styles['page-nav__day-week']}>{date.format('dd').toUpperCase()}</span>
+      <span className={styles['page-nav__day-number']}>{date.format('DD')}</span>
     </button>
   );
 }

@@ -3,13 +3,20 @@
 
 import React, { useState, useContext } from 'react';
 import moment from 'moment';
-import DateContext from '../contexts/DateContext';
-import NavTab from './NavTab';
 import 'moment/locale/ru';
+import DateContext from '../../contexts/DateContext';
+import NavTab from './NavTab';
+import styles from './css/nav.module.css';
+
+const HOME_PAGE_NAV = {
+  position: 'sticky',
+  top: '2px',
+  paddingBottom: '1rem',
+};
 
 // Навигация по датам
-const Nav = () => {
-  const [days, setDays] = useState([
+const Nav = ({ isHomePage }) => {
+  const [dates, setDates] = useState([
     moment(),
     moment().add(1, 'd'),
     moment().add(2, 'd'),
@@ -32,8 +39,10 @@ const Nav = () => {
   // Но не будет работать если крайний левый блок
   // является сегодняшней датой
   const setPrevDay = () => {
-    if (days[0].format('L') !== moment().format('L')) {
-      setDays((prevDays) => {
+    const today = moment().format('L');
+
+    if (dates[0].format('L') !== today) {
+      setDates((prevDays) => {
         prevDays.pop();
         const prevDay = prevDays[0].clone().subtract(1, 'd');
         return [prevDay, ...prevDays];
@@ -42,10 +51,10 @@ const Nav = () => {
   };
 
   // При нажатий на кнопку 'вперед'
-  // показывается следующая дат
+  // показывается следующая дата
   // Лимита нет (Может стоит сделать?)
   const setNextDay = () => {
-    setDays((prevDays) => {
+    setDates((prevDays) => {
       prevDays.shift();
       const nextDay = prevDays[prevDays.length - 1].clone().add(1, 'd');
       return [...prevDays, nextDay];
@@ -53,18 +62,21 @@ const Nav = () => {
   };
 
   return (
-    <nav className="page-nav">
+    <nav
+      className={styles['page-nav']}
+      style={isHomePage && HOME_PAGE_NAV}
+    >
       <button
         type="button"
-        className="page-nav__day page-nav__day_prev"
+        className={`${styles['page-nav__day']} ${styles['page-nav__day_prev']}`}
         onClick={setPrevDay}
       />
-      {days.map((date) => (
+      {dates.map((date) => (
         <NavTab key={date.format('L')} date={date} onChoose={handleChoose} />
       ))}
       <button
         type="button"
-        className="page-nav__day page-nav__day_next"
+        className={`${styles['page-nav__day']} ${styles['page-nav__day_next']}`}
         onClick={setNextDay}
       />
     </nav>
