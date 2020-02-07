@@ -28,18 +28,10 @@ if ($method === 'GET') {
 } elseif ($method === 'POST') {
 
     $action = $_POST['action'] ?? $payload->action;
-    $table = $_POST['table'] ?? $payload->table;
-    $data = json_decode($_POST['data']) ?? json_decode($payload->data);
-    $file = $_FILES['poster'] ?? null;
+    $data = $_POST['data'] ?? $payload->data;
+    $data = json_decode($data);
 
-    if ($action === 'addOrder') {
-        header("Content-Type: image/png");
-    }
-
-    $obj = new AddData($action, $table, $data, $connect, $file);
-    $obj->add();
-
-    if ($action === 'addOrder') {
+    if ($action === 'addEmail') {
         $mail = new PHPMailer(true);
     
         $id = $data->orderId;
@@ -54,7 +46,7 @@ if ($method === 'GET') {
                 'host' => 'smtp.mail.ru',
                 'auth' => true,
                 'username' => 'idemvkino.prilozheniye@mail.ru',
-                'password' => 'AAoPT2osra4_',
+                'password' => 'OKeTtYui72y*',
                 'encryption' => PHPMailer::ENCRYPTION_STARTTLS,
                 'port' => 587,
                 'from' => [
@@ -79,8 +71,19 @@ if ($method === 'GET') {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
         unset($mail);
+    } else {
+
+        $table = $_POST['table'] ?? $payload->table;
+        $file = $_FILES['poster'] ?? null;
+
+        if ($action === 'addOrder') {
+            header("Content-Type: image/png");
+        }
+
+        $obj = new AddData($action, $table, $data, $connect, $file);
+        $obj->add();
     }
-    
+
 } elseif ($method === 'PUT') {
     
     $path = explode('/', $_SERVER['PATH_INFO']);
