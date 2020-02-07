@@ -14,8 +14,8 @@ class EmailSender
 
     private function addHTML($template, $data)
     {
-        $template = str_replace(['{%TIME%}', '{%HALL_NAME%}', '{%MOVIE_NAME%}'], [$data->time, $data->hall, $data->movieName], $template);
-        $tickets = json_decode($data->tickets);
+        $template = str_replace(['{%TIME%}', '{%HALL_NAME%}', '{%MOVIE_NAME%}'], [$data->time->time, $data->hall, $data->movieName], $template);
+        $tickets = $data->tickets;
         $seats = '';
 
         foreach ($tickets as $ticket) {
