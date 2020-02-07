@@ -7,11 +7,10 @@ import { Redirect } from 'react-router-dom';
 import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
 import ClientUI from '../ClientUI';
-import Header from '../../../shared-components/Header';
-import Main from '../../../shared-components/Main';
+import Header from '../../../shared-components/Header/Header';
+import Main from '../../../shared-components/Main/Main';
 import Payment from './Payment';
 import Order from '../../models/Order';
-import '../../css/client.css';
 
 // Главная для оплаты билета
 // Здесь формируется заказ

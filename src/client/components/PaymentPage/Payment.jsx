@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Order from '../../models/Order';
 import Seats from '../../../shared-components/Seats';
-
+import styles from './css/PaymentPage.module.css';
 // Показывает что было выбранно
 // Какие места, фильм и тд
 // При клике на получить код бронирования
@@ -18,47 +18,47 @@ const Payment = (props) => {
     newOrder,
     totalPrice,
     tickets,
-    email,
   } = props;
   const { movieName, hall, time } = data;
 
   return (
-    <section className="ticket">
+    <section className={styles.ticket}>
 
-      <header className="tichet__check">
-        <h2 className="ticket__check-title">Вы выбрали билеты:</h2>
+      <header className={styles.tichet__check}>
+        <h2 className={styles['ticket__check-title']}>Вы выбрали билеты:</h2>
       </header>
 
-      <div className="ticket__info-wrapper">
-        <p className="ticket__info">
+      <div className={styles['ticket__info-wrapper']}>
+        <p className={styles.ticket__info}>
 На фильм:
           {' '}
-          <span className="ticket__details ticket__title">{movieName}</span>
+          <span className={`${styles.ticket__details} ${styles.ticket__title}`}>{movieName}</span>
         </p>
-        <p className="ticket__info">
+        <p className={styles.ticket__info}>
 Места:
           {' '}
           {tickets.map((t) => <Seats key={`${t.row}_${t.seat}`} row={t.row} seat={t.seat} />)}
         </p>
-        <p className="ticket__info">
+        <p className={styles.ticket__info}>
 В зале:
           {' '}
-          <span className="ticket__details ticket__hall">{hall}</span>
+          <span className={`${styles.ticket__details} ${styles.ticket__hall}`}>{hall}</span>
         </p>
-        <p className="ticket__info">
+        <p className={styles.ticket__info}>
 Начало сеанса:
           {' '}
-          <span className="ticket__details ticket__start">{time.time}</span>
+          <span className={`${styles.ticket__details} ${styles.ticket__start}`}>{time.time}</span>
         </p>
-        <p className="ticket__info">
+        <p className={styles.ticket__info}>
 Стоимость:
           {' '}
-          <span className="ticket__details ticket__cost">{totalPrice}</span>
+          <span className={`${styles.ticket__details} ${styles.ticket__cost}`}>{totalPrice}</span>
 рублей
         </p>
-
+        {/* Как верно передавать пропсы через линк? */}
+        {/* Стоит ли делать как снизу? */}
         <Link
-          className="acceptin-button"
+          className={styles['acceptin-button']}
           to={{
             pathname: '/ticket',
             state: {
@@ -67,7 +67,6 @@ const Payment = (props) => {
               data,
               hallMap,
               tickets,
-              email,
             },
           }}
           role="button"
@@ -75,11 +74,11 @@ const Payment = (props) => {
 Получить код бронирования
         </Link>
 
-        <p className="ticket__hint">
+        <p className={styles.ticket__hint}>
 После оплаты билет будет доступен в этом окне, а также придёт вам на почту.
 Покажите QR-код нашему контроллёру у входа в зал.
         </p>
-        <p className="ticket__hint">
+        <p className={styles.ticket__hint}>
 Приятного просмотра!
         </p>
       </div>
