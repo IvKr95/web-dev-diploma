@@ -22,7 +22,6 @@ function Modal(props) {
     onAddHall: addHall,
     itemToDelete,
     onDelete: handleDelete,
-    halls,
     shows,
   } = props;
 
@@ -35,15 +34,14 @@ function Modal(props) {
             onClose={handleClose}
           />
           <ModalBody
+            shows={shows}
             action={action}
             onAddShow={addShow}
-            onAddMovie={addMovie}
             onAddHall={addHall}
+            onAddMovie={addMovie}
             onClose={handleClose}
-            itemToDelete={itemToDelete}
             onDelete={handleDelete}
-            halls={halls}
-            shows={shows}
+            itemToDelete={itemToDelete}
           />
         </div>
       </div>
@@ -54,7 +52,24 @@ function Modal(props) {
 Modal.propTypes = {
   // С помощью этой переменной проверяем состояние модального окна
   isModalActive: PropTypes.bool.isRequired,
-  // children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  action: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  shows: PropTypes.arrayOf(PropTypes.object),
+  itemToDelete: PropTypes.string,
+  onAddShow: PropTypes.func,
+  onAddHall: PropTypes.func,
+  onAddMovie: PropTypes.func,
+  onDelete: PropTypes.func,
+};
+
+
+Modal.defaultProps = {
+  shows: [],
+  itemToDelete: '',
+  onAddShow: () => {},
+  onAddHall: () => {},
+  onAddMovie: () => {},
+  onDelete: () => {},
 };
 
 export default Modal;

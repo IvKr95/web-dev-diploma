@@ -39,7 +39,7 @@ function ActiveHallMap(props) {
     setActiveHallMap((prev) => {
       const hallMapCopy = [...prev];
       hallMapCopy[rowIndex][seatIndex] = newSeatType;
-      return [...hallMapCopy];
+      return hallMapCopy;
     });
   };
 

@@ -18,7 +18,7 @@ import Order from '../../models/Order';
 const PaymentPage = ({ location }) => {
   const { params, state } = location;
   const {
-    tickets, data, hallMap, email,
+    tickets, data, hallMap,
   } = params;
 
   const [order, setOrder] = useState({});
@@ -60,7 +60,6 @@ const PaymentPage = ({ location }) => {
                 newOrder={order}
                 totalPrice={totalPrice}
                 tickets={tickets}
-                email={email}
               />
             </Main>
           </ClientUI>

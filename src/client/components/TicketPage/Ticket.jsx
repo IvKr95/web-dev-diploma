@@ -11,13 +11,13 @@ import styles from '../PaymentPage/css/PaymentPage.module.css';
 // Просто отображает билет
 function Ticket(props) {
   const {
+    qr,
+    add,
     data,
     orderId,
     tickets,
-    qr,
     isLoading,
     setIsLoading,
-    add,
   } = props;
   const { movieName, hall, time } = data;
 
@@ -73,7 +73,9 @@ function Ticket(props) {
 
         <img className={styles.ticket__qr} src={qr} alt="qr-code" />
         <AddContacts onAddEmail={addEmail} />
-        <p className={styles.ticket__hint}>Покажите QR-код нашему контроллеру для подтверждения бронирования.</p>
+        <p className={styles.ticket__hint}>
+          Покажите QR-код нашему контроллеру для подтверждения бронирования.
+        </p>
         <p className={styles.ticket__hint}>Приятного просмотра!</p>
       </div>
     </section>
@@ -91,6 +93,10 @@ Ticket.propTypes = {
   }).isRequired,
   tickets: PropTypes.arrayOf(PropTypes.object).isRequired,
   qr: PropTypes.string.isRequired,
+  add: PropTypes.func.isRequired,
+  orderId: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  setIsLoading: PropTypes.func.isRequired,
 };
 
 export default withCrud(withLoadingScreen(Ticket));

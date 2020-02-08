@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from '../../admin/css/admin.module.css';
 
 const DEFAULT_EMAIL = '';
@@ -7,11 +8,7 @@ const DEFAULT_EMAIL = '';
 // Форма добавления контактов,
 // на которые нужно будет отправить
 // сообщение о заказе билета
-const AddContacts = (props) => {
-  const {
-    onAddEmail: addEmail,
-  } = props;
-
+const AddContacts = ({ onAddEmail: addEmail }) => {
   const [email, setEmail] = useState(DEFAULT_EMAIL);
 
   const handleChange = (event) => {
@@ -46,6 +43,10 @@ const AddContacts = (props) => {
       </div>
     </form>
   );
+};
+
+AddContacts.propTypes = {
+  onAddEmail: PropTypes.func.isRequired,
 };
 
 export default AddContacts;

@@ -4,7 +4,9 @@
 // Если кресло выбранно меняет объект кресла
 // Заменяет на противоположные значения
 const updateHallMap = (map) => {
-  for (const row of map) {
+  const mapCopy = [...map];
+
+  for (const row of mapCopy) {
     for (const seat of row) {
       if (seat.isSelected) {
         seat.isAvail = !seat.isAvail;
@@ -13,7 +15,8 @@ const updateHallMap = (map) => {
       }
     }
   }
-  return map;
+
+  return mapCopy;
 };
 
 export default updateHallMap;

@@ -45,30 +45,31 @@ function HallSchema(props) {
   // Выбирает кресло
   const selectSeat = (row, seat) => {
     setHallMap((prevMap) => {
-      const seatObj = prevMap[row - 1][seat - 1];
+      const prevMapCopy = [...prevMap];
+      const seatObj = prevMapCopy[row - 1][seat - 1];
       seatObj.isSelected = !seatObj.isSelected;
 
-      return [...prevMap];
+      return prevMapCopy;
     });
   };
 
   const handleTickets = (newTicket) => {
     setTickets((prevTickets) => {
+      const prevTicketsCopy = [...prevTickets];
+
       const alreadyExistingTicket = prevTickets.find(
         (ticket) => ticket.row === newTicket.row && ticket.seat === newTicket.seat,
       );
 
       if (alreadyExistingTicket) {
-        for (let ticket = 0; ticket < prevTickets.length; ticket++) {
-          const prevTicket = prevTickets[ticket];
-
-          if (prevTicket.row === newTicket.row && prevTicket.seat === newTicket.seat) {
-            prevTickets.splice(ticket, 1);
+        for (const ticket of prevTickets) {
+          if (ticket.row === newTicket.row && ticket.seat === newTicket.seat) {
+            prevTicketsCopy.splice(ticket, 1);
           }
         }
-        return [...prevTickets];
+        return prevTicketsCopy;
       }
-      return [...prevTickets, newTicket];
+      return [...prevTicketsCopy, newTicket];
     });
   };
 

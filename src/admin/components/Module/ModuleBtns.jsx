@@ -31,6 +31,8 @@ function ModuleBtns(props) {
 }
 
 ModuleBtns.propTypes = {
+  action: PropTypes.string.isRequired,
+  isInModal: PropTypes.bool.isRequired,
   form: PropTypes.string.isRequired,
   onReset: PropTypes.func.isRequired,
 };
